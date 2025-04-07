@@ -1,0 +1,1052 @@
+[
+    {
+        "model": "Aulora_bakend.usuario",
+        "pk": 1,
+        "fields": {
+          "password": "pbkdf2_sha256$260000$hashadmin1",
+          "last_login": "2025-03-31T09:00:00Z",
+          "email": "admin1@example.com",
+          "contraseña": "adminpass1",
+          "is_staff": true,
+          "is_superuser": true,
+          "rol": "admin",
+          "nombre": "Administrador Uno",
+          "tipo_cuenta": "PR",
+          "foto_perfil": "usuarios/fotos/admin1.jpg",
+          "groups": [],
+          "user_permissions": []
+        }
+      },
+      {
+        "model": "Aulora_bakend.usuario",
+        "pk": 2,
+        "fields": {
+          "password": "pbkdf2_sha256$260000$hashprof1",
+          "last_login": "2025-03-31T09:10:00Z",
+          "email": "profesor1@example.com",
+          "contraseña": "profpass1",
+          "is_staff": true,
+          "is_superuser": false,
+          "rol": "profesor",
+          "nombre": "Profesor Uno",
+          "tipo_cuenta": "PR",
+          "foto_perfil": "usuarios/fotos/profesor1.jpg",
+          "groups": [],
+          "user_permissions": []
+        }
+      },
+      {
+        "model": "Aulora_bakend.usuario",
+        "pk": 3,
+        "fields": {
+          "password": "pbkdf2_sha256$260000$hashest1",
+          "last_login": "2025-03-31T09:20:00Z",
+          "email": "estudiante1@example.com",
+          "contraseña": "estpass1",
+          "is_staff": false,
+          "is_superuser": false,
+          "rol": "estudiante",
+          "nombre": "Estudiante Uno",
+          "tipo_cuenta": "FR",
+          "foto_perfil": "usuarios/fotos/estudiante1.png",
+          "groups": [],
+          "user_permissions": []
+        }
+      },
+      {
+        "model": "Aulora_bakend.usuario",
+        "pk": 4,
+        "fields": {
+          "password": "pbkdf2_sha256$260000$hashprof2",
+          "last_login": "2025-03-31T09:30:00Z",
+          "email": "profesor2@example.com",
+          "contraseña": "profpass2",
+          "is_staff": true,
+          "is_superuser": false,
+          "rol": "profesor",
+          "nombre": "Profesor Dos",
+          "tipo_cuenta": "PR",
+          "foto_perfil": "usuarios/fotos/profesor2.jpg",
+          "groups": [],
+          "user_permissions": []
+        }
+      },
+      {
+        "model": "Aulora_bakend.usuario",
+        "pk": 5,
+        "fields": {
+          "password": "pbkdf2_sha256$260000$hashest2",
+          "last_login": "2025-03-31T09:40:00Z",
+          "email": "estudiante2@example.com",
+          "contraseña": "estpass2",
+          "is_staff": false,
+          "is_superuser": false,
+          "rol": "estudiante",
+          "nombre": "Estudiante Dos",
+          "tipo_cuenta": "FR",
+          "foto_perfil": "usuarios/fotos/estudiante2.png",
+          "groups": [],
+          "user_permissions": []
+        }
+      },
+    
+      {
+        "model": "Aulora_bakend.profesor",
+        "pk": 1,
+        "fields": {
+          "usuario": 2
+        }
+      },
+      {
+        "model": "Aulora_bakend.profesor",
+        "pk": 2,
+        "fields": {
+          "usuario": 4
+        }
+      },
+      {
+        "model": "Aulora_bakend.profesor",
+        "pk": 3,
+        "fields": {
+          "usuario": 1
+        }
+      },
+      {
+        "model": "Aulora_bakend.profesor",
+        "pk": 4,
+        "fields": {
+          "usuario": 3
+        }
+      },
+      {
+        "model": "Aulora_bakend.profesor",
+        "pk": 5,
+        "fields": {
+          "usuario": 5
+        }
+      },
+    
+      {
+        "model": "Aulora_bakend.estudiante",
+        "pk": 1,
+        "fields": {
+          "usuario": 3
+        }
+      },
+      {
+        "model": "Aulora_bakend.estudiante",
+        "pk": 2,
+        "fields": {
+          "usuario": 5
+        }
+      },
+      {
+        "model": "Aulora_bakend.estudiante",
+        "pk": 3,
+        "fields": {
+          "usuario": 1
+        }
+      },
+      {
+        "model": "Aulora_bakend.estudiante",
+        "pk": 4,
+        "fields": {
+          "usuario": 2
+        }
+      },
+      {
+        "model": "Aulora_bakend.estudiante",
+        "pk": 5,
+        "fields": {
+          "usuario": 4
+        }
+      },
+    
+      {
+        "model": "Aulora_bakend.categoria",
+        "pk": 1,
+        "fields": {
+          "nombre": "Matemáticas"
+        }
+      },
+      {
+        "model": "Aulora_bakend.categoria",
+        "pk": 2,
+        "fields": {
+          "nombre": "Ciencias"
+        }
+      },
+      {
+        "model": "Aulora_bakend.categoria",
+        "pk": 3,
+        "fields": {
+          "nombre": "Historia"
+        }
+      },
+      {
+        "model": "Aulora_bakend.categoria",
+        "pk": 4,
+        "fields": {
+          "nombre": "Lengua"
+        }
+      },
+      {
+        "model": "Aulora_bakend.categoria",
+        "pk": 5,
+        "fields": {
+          "nombre": "Informática"
+        }
+      },
+    
+      {
+        "model": "Aulora_bakend.curso",
+        "pk": 1,
+        "fields": {
+          "titulo": "Álgebra Básica",
+          "descripcion": "Introducción al álgebra.",
+          "categoria_id": 1,
+          "precio": 100
+        }
+      },
+      {
+        "model": "Aulora_bakend.curso",
+        "pk": 2,
+        "fields": {
+          "titulo": "Biología General",
+          "descripcion": "Conceptos fundamentales de biología.",
+          "categoria_id": 2,
+          "precio": 150
+        }
+      },
+      {
+        "model": "Aulora_bakend.curso",
+        "pk": 3,
+        "fields": {
+          "titulo": "Historia Universal",
+          "descripcion": "Panorama de la historia mundial.",
+          "categoria_id": 3,
+          "precio": 200
+        }
+      },
+      {
+        "model": "Aulora_bakend.curso",
+        "pk": 4,
+        "fields": {
+          "titulo": "Gramática Española",
+          "descripcion": "Reglas y uso de la lengua española.",
+          "categoria_id": 4,
+          "precio": 80
+        }
+      },
+      {
+        "model": "Aulora_bakend.curso",
+        "pk": 5,
+        "fields": {
+          "titulo": "Programación en Python",
+          "descripcion": "Introducción a la programación con Python.",
+          "categoria_id": 5,
+          "precio": 250
+        }
+      },
+    
+      {
+        "model": "Aulora_bakend.modulo",
+        "pk": 1,
+        "fields": {
+          "curso_id": 1,
+          "titulo": "Ecuaciones",
+          "contenido": "Resolución de ecuaciones básicas.",
+          "archivo": "modulos/archivos/ecuaciones.jpg",
+          "tipo_archivo": "foto"
+        }
+      },
+      {
+        "model": "Aulora_bakend.modulo",
+        "pk": 2,
+        "fields": {
+          "curso_id": 2,
+          "titulo": "Células y Organismos",
+          "contenido": "Estructura y función de las células.",
+          "archivo": "modulos/archivos/celulas.mp4",
+          "tipo_archivo": "video"
+        }
+      },
+      {
+        "model": "Aulora_bakend.modulo",
+        "pk": 3,
+        "fields": {
+          "curso_id": 3,
+          "titulo": "Guerras y Civilizaciones",
+          "contenido": "Estudio de conflictos históricos.",
+          "archivo": "modulos/archivos/guerras.pdf",
+          "tipo_archivo": "documento"
+        }
+      },
+      {
+        "model": "Aulora_bakend.modulo",
+        "pk": 4,
+        "fields": {
+          "curso_id": 4,
+          "titulo": "Sintaxis y Redacción",
+          "contenido": "Normas gramaticales y ejercicios de redacción.",
+          "archivo": "modulos/archivos/sintaxis.png",
+          "tipo_archivo": "foto"
+        }
+      },
+      {
+        "model": "Aulora_bakend.modulo",
+        "pk": 5,
+        "fields": {
+          "curso_id": 5,
+          "titulo": "Variables y Funciones",
+          "contenido": "Introducción a variables, tipos y funciones en Python.",
+          "archivo": "modulos/archivos/variables.docx",
+          "tipo_archivo": "documento"
+        }
+      },
+    
+      {
+        "model": "Aulora_bakend.pago",
+        "pk": 1,
+        "fields": {
+          "usuario_id": 3,
+          "curso_id": 1,
+          "cantidad": 100,
+          "metodo_pago": "TC"
+        }
+      },
+      {
+        "model": "Aulora_bakend.pago",
+        "pk": 2,
+        "fields": {
+          "usuario_id": 4,
+          "curso_id": 2,
+          "cantidad": 150,
+          "metodo_pago": "PP"
+        }
+      },
+      {
+        "model": "Aulora_bakend.pago",
+        "pk": 3,
+        "fields": {
+          "usuario_id": 5,
+          "curso_id": 3,
+          "cantidad": 200,
+          "metodo_pago": "TC"
+        }
+      },
+      {
+        "model": "Aulora_bakend.pago",
+        "pk": 4,
+        "fields": {
+          "usuario_id": 1,
+          "curso_id": 4,
+          "cantidad": 80,
+          "metodo_pago": "PP"
+        }
+      },
+      {
+        "model": "Aulora_bakend.pago",
+        "pk": 5,
+        "fields": {
+          "usuario_id": 2,
+          "curso_id": 5,
+          "cantidad": 250,
+          "metodo_pago": "TC"
+        }
+      },
+    
+      {
+        "model": "Aulora_bakend.inscripcion",
+        "pk": 1,
+        "fields": {
+          "usuario": 3,
+          "curso": 1,
+          "fecha_inscripcion": "2025-03-31"
+        }
+      },
+      {
+        "model": "Aulora_bakend.inscripcion",
+        "pk": 2,
+        "fields": {
+          "usuario": 4,
+          "curso": 2,
+          "fecha_inscripcion": "2025-03-31"
+        }
+      },
+      {
+        "model": "Aulora_bakend.inscripcion",
+        "pk": 3,
+        "fields": {
+          "usuario": 5,
+          "curso": 3,
+          "fecha_inscripcion": "2025-03-31"
+        }
+      },
+      {
+        "model": "Aulora_bakend.inscripcion",
+        "pk": 4,
+        "fields": {
+          "usuario": 1,
+          "curso": 4,
+          "fecha_inscripcion": "2025-03-31"
+        }
+      },
+      {
+        "model": "Aulora_bakend.inscripcion",
+        "pk": 5,
+        "fields": {
+          "usuario": 2,
+          "curso": 5,
+          "fecha_inscripcion": "2025-03-31"
+        }
+      } ,
+{
+    "model": "auth.permission",
+    "pk": 1,
+    "fields": {
+        "name": "Can add log entry",
+        "content_type": 1,
+        "codename": "add_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 2,
+    "fields": {
+        "name": "Can change log entry",
+        "content_type": 1,
+        "codename": "change_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 3,
+    "fields": {
+        "name": "Can delete log entry",
+        "content_type": 1,
+        "codename": "delete_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 4,
+    "fields": {
+        "name": "Can view log entry",
+        "content_type": 1,
+        "codename": "view_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 5,
+    "fields": {
+        "name": "Can add content type",
+        "content_type": 2,
+        "codename": "add_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 6,
+    "fields": {
+        "name": "Can change content type",
+        "content_type": 2,
+        "codename": "change_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 7,
+    "fields": {
+        "name": "Can delete content type",
+        "content_type": 2,
+        "codename": "delete_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 8,
+    "fields": {
+        "name": "Can view content type",
+        "content_type": 2,
+        "codename": "view_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 9,
+    "fields": {
+        "name": "Can add session",
+        "content_type": 3,
+        "codename": "add_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 10,
+    "fields": {
+        "name": "Can change session",
+        "content_type": 3,
+        "codename": "change_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 11,
+    "fields": {
+        "name": "Can delete session",
+        "content_type": 3,
+        "codename": "delete_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 12,
+    "fields": {
+        "name": "Can view session",
+        "content_type": 3,
+        "codename": "view_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 13,
+    "fields": {
+        "name": "Can add application",
+        "content_type": 4,
+        "codename": "add_application"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 14,
+    "fields": {
+        "name": "Can change application",
+        "content_type": 4,
+        "codename": "change_application"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 15,
+    "fields": {
+        "name": "Can delete application",
+        "content_type": 4,
+        "codename": "delete_application"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 16,
+    "fields": {
+        "name": "Can view application",
+        "content_type": 4,
+        "codename": "view_application"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 17,
+    "fields": {
+        "name": "Can add grant",
+        "content_type": 5,
+        "codename": "add_grant"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 18,
+    "fields": {
+        "name": "Can change grant",
+        "content_type": 5,
+        "codename": "change_grant"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 19,
+    "fields": {
+        "name": "Can delete grant",
+        "content_type": 5,
+        "codename": "delete_grant"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 20,
+    "fields": {
+        "name": "Can view grant",
+        "content_type": 5,
+        "codename": "view_grant"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 21,
+    "fields": {
+        "name": "Can add access token",
+        "content_type": 6,
+        "codename": "add_accesstoken"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 22,
+    "fields": {
+        "name": "Can change access token",
+        "content_type": 6,
+        "codename": "change_accesstoken"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 23,
+    "fields": {
+        "name": "Can delete access token",
+        "content_type": 6,
+        "codename": "delete_accesstoken"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 24,
+    "fields": {
+        "name": "Can view access token",
+        "content_type": 6,
+        "codename": "view_accesstoken"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 25,
+    "fields": {
+        "name": "Can add refresh token",
+        "content_type": 7,
+        "codename": "add_refreshtoken"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 26,
+    "fields": {
+        "name": "Can change refresh token",
+        "content_type": 7,
+        "codename": "change_refreshtoken"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 27,
+    "fields": {
+        "name": "Can delete refresh token",
+        "content_type": 7,
+        "codename": "delete_refreshtoken"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 28,
+    "fields": {
+        "name": "Can view refresh token",
+        "content_type": 7,
+        "codename": "view_refreshtoken"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 29,
+    "fields": {
+        "name": "Can add id token",
+        "content_type": 8,
+        "codename": "add_idtoken"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 30,
+    "fields": {
+        "name": "Can change id token",
+        "content_type": 8,
+        "codename": "change_idtoken"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 31,
+    "fields": {
+        "name": "Can delete id token",
+        "content_type": 8,
+        "codename": "delete_idtoken"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 32,
+    "fields": {
+        "name": "Can view id token",
+        "content_type": 8,
+        "codename": "view_idtoken"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 33,
+    "fields": {
+        "name": "Can add usuario",
+        "content_type": 9,
+        "codename": "add_usuario"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 34,
+    "fields": {
+        "name": "Can change usuario",
+        "content_type": 9,
+        "codename": "change_usuario"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 35,
+    "fields": {
+        "name": "Can delete usuario",
+        "content_type": 9,
+        "codename": "delete_usuario"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 36,
+    "fields": {
+        "name": "Can view usuario",
+        "content_type": 9,
+        "codename": "view_usuario"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 37,
+    "fields": {
+        "name": "Can add profesor",
+        "content_type": 10,
+        "codename": "add_profesor"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 38,
+    "fields": {
+        "name": "Can change profesor",
+        "content_type": 10,
+        "codename": "change_profesor"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 39,
+    "fields": {
+        "name": "Can delete profesor",
+        "content_type": 10,
+        "codename": "delete_profesor"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 40,
+    "fields": {
+        "name": "Can view profesor",
+        "content_type": 10,
+        "codename": "view_profesor"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 41,
+    "fields": {
+        "name": "Can add estudiante",
+        "content_type": 11,
+        "codename": "add_estudiante"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 42,
+    "fields": {
+        "name": "Can change estudiante",
+        "content_type": 11,
+        "codename": "change_estudiante"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 43,
+    "fields": {
+        "name": "Can delete estudiante",
+        "content_type": 11,
+        "codename": "delete_estudiante"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 44,
+    "fields": {
+        "name": "Can view estudiante",
+        "content_type": 11,
+        "codename": "view_estudiante"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 45,
+    "fields": {
+        "name": "Can add categoria",
+        "content_type": 12,
+        "codename": "add_categoria"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 46,
+    "fields": {
+        "name": "Can change categoria",
+        "content_type": 12,
+        "codename": "change_categoria"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 47,
+    "fields": {
+        "name": "Can delete categoria",
+        "content_type": 12,
+        "codename": "delete_categoria"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 48,
+    "fields": {
+        "name": "Can view categoria",
+        "content_type": 12,
+        "codename": "view_categoria"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 49,
+    "fields": {
+        "name": "Can add curso",
+        "content_type": 13,
+        "codename": "add_curso"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 50,
+    "fields": {
+        "name": "Can change curso",
+        "content_type": 13,
+        "codename": "change_curso"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 51,
+    "fields": {
+        "name": "Can delete curso",
+        "content_type": 13,
+        "codename": "delete_curso"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 52,
+    "fields": {
+        "name": "Can view curso",
+        "content_type": 13,
+        "codename": "view_curso"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 53,
+    "fields": {
+        "name": "Can add modulo",
+        "content_type": 14,
+        "codename": "add_modulo"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 54,
+    "fields": {
+        "name": "Can change modulo",
+        "content_type": 14,
+        "codename": "change_modulo"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 55,
+    "fields": {
+        "name": "Can delete modulo",
+        "content_type": 14,
+        "codename": "delete_modulo"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 56,
+    "fields": {
+        "name": "Can view modulo",
+        "content_type": 14,
+        "codename": "view_modulo"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 57,
+    "fields": {
+        "name": "Can add pago",
+        "content_type": 15,
+        "codename": "add_pago"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 58,
+    "fields": {
+        "name": "Can change pago",
+        "content_type": 15,
+        "codename": "change_pago"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 59,
+    "fields": {
+        "name": "Can delete pago",
+        "content_type": 15,
+        "codename": "delete_pago"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 60,
+    "fields": {
+        "name": "Can view pago",
+        "content_type": 15,
+        "codename": "view_pago"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 61,
+    "fields": {
+        "name": "Can add inscripcion",
+        "content_type": 16,
+        "codename": "add_inscripcion"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 62,
+    "fields": {
+        "name": "Can change inscripcion",
+        "content_type": 16,
+        "codename": "change_inscripcion"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 63,
+    "fields": {
+        "name": "Can delete inscripcion",
+        "content_type": 16,
+        "codename": "delete_inscripcion"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 64,
+    "fields": {
+        "name": "Can view inscripcion",
+        "content_type": 16,
+        "codename": "view_inscripcion"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 65,
+    "fields": {
+        "name": "Can add permission",
+        "content_type": 17,
+        "codename": "add_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 66,
+    "fields": {
+        "name": "Can change permission",
+        "content_type": 17,
+        "codename": "change_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 67,
+    "fields": {
+        "name": "Can delete permission",
+        "content_type": 17,
+        "codename": "delete_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 68,
+    "fields": {
+        "name": "Can view permission",
+        "content_type": 17,
+        "codename": "view_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 69,
+    "fields": {
+        "name": "Can add group",
+        "content_type": 18,
+        "codename": "add_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 70,
+    "fields": {
+        "name": "Can change group",
+        "content_type": 18,
+        "codename": "change_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 71,
+    "fields": {
+        "name": "Can delete group",
+        "content_type": 18,
+        "codename": "delete_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 72,
+    "fields": {
+        "name": "Can view group",
+        "content_type": 18,
+        "codename": "view_group"
+    }
+}
+]
