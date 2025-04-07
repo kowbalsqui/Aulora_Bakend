@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,19 +26,26 @@ SECRET_KEY = 'django-insecure-kb=zha@_98tw^9171b@!t9(dq&$(wrluow7*3r5-@pzo2&831+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com','0.0.0.0']
+ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com','0.0.0.0', 'localhost']
 
 
 # Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
-    'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Aulora_bakend',
+    'django_seed',
+    'django_bootstrap5',
+    'django_bootstrap_icons',
+    'oauth2_provider',
+    'rest_framework',  # Django REST Framework
+    'rest_framework.authtoken',
+    'corsheaders',  # Para manejar CORS (peticiones desde Angular)
+    'Aulora_bakend',  # Tu aplicación
+    'django.contrib.auth',  # Sistema de autenticación
 ]
 
 MIDDLEWARE = [
@@ -48,7 +56,31 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # Habilita CORS
 ]
+
+# Permitir solicitudes desde el frontend
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:4200",  # URL de tu frontend Angular
+]
+
+# Configurar Django REST Framework
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',  # Solo usuarios autenticados
+    ]
+}
+
+OAUTH2_PROVIDER = {
+
+   'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Acceso a los grupos'},
+}
 
 ROOT_URLCONF = 'mysite.urls'
 
@@ -76,8 +108,12 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'aulora_db',        # El nombre de la base de datos que creaste
+        'USER': 'aulora_user',      # El usuario que creaste
+        'PASSWORD': 'Aulora',       # La contraseña que asignaste
+        'HOST': 'localhost',        # Si PostgreSQL está en la misma máquina
+        'PORT': '5432',             # Puerto por defecto de PostgreSQL
     }
 }
 
@@ -110,14 +146,17 @@ TIME_ZONE = 'Europe/Madrid'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'static'
+AUTH_USER_MODEL = 'Aulora_bakend.Usuario'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
