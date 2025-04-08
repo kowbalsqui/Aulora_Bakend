@@ -49,7 +49,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     tipo_cuenta = models.CharField(choices=TIPO_CUENTA, max_length=50)
     
     # Campo añadido para la foto de perfil
-    foto_perfil = models.ImageField(upload_to='usuarios/fotos/', blank=True, null=True)
+    foto_perfil = models.ImageField(upload_to='usuarios/fotos/', blank=True, null=True, default='defaults/avatar.webp')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['contrasena']
