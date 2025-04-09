@@ -53,6 +53,8 @@ class InscripcionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Inscripcion
         fields = ['id', 'usuario', 'curso', 'fecha_inscripcion']
+
+#Serializer para el regustro de los usuarios
     
 from rest_framework import serializers
 from .models import Usuario
@@ -101,3 +103,45 @@ class UsuarioSerializerRegistro(serializers.Serializer):
         user.save()
         return user
 
+#Serializer para el modificar perfil del usuario
+
+class ModificaPerfilUsuario(serializers.ModelSerializer):
+    class Meta:
+        model = Usuario
+        fields = ['nombre', 'foto_perfil', 'tipo_cuenta', 'contrasena']
+        extra_kwargs = {
+            'contrasena': {'required': False, 'write_only': True}
+        }
+
+    def update(self, instance, validated_data):
+        password = validated_data.pop('contrasena', None)
+        nombre = validated_data.pop('nombre', None)
+        foto = validated_data.pop('foto_perfil', None)
+        cuenta = validated_data.pop('tipo_cuenta', None)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        if password:
+            instance.set_password(password)
+            instance.contrasena = password
+
+        if nombre:
+            instance.nombre = nombre
+
+        if foto:
+            instance.foto_perfil = foto
+
+        if cuenta:
+            instance.tipo_cuenta = cuenta
+
+        instance.save()
+        return instance
+    
+class GetDatosPerfil(serializers.ModelSerializer):
+    class Meta: 
+        model= Usuario
+        fields= ['nombre', 'foto_perfil', 'contrasena', 'tipo_cuenta']
+        extra_kwargs = {
+            'contrasena': {'write_only': True}
+        }
