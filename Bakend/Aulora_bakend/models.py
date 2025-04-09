@@ -108,6 +108,12 @@ class Modulo(models.Model):
         null=True
     )
 
+class Itinerario(models.Model):
+    titulo = models.CharField(max_length=50)
+    descripcion = models.CharField(max_length=300)  
+    cursos = models.ManyToManyField(Curso, related_name='itinerario', through='Itinerario_curso')
+
+
 # Clase del modelo de Pago
 class Pago(models.Model): 
     usuario_id = models.ForeignKey(Usuario, on_delete=models.CASCADE)
@@ -124,3 +130,8 @@ class Inscripcion(models.Model):
     usuario = models.ForeignKey('Usuario', on_delete=models.CASCADE, related_name='inscripciones')
     curso = models.ForeignKey('Curso', on_delete=models.CASCADE, related_name='inscripciones')
     fecha_inscripcion = models.DateField(default=timezone.now)
+
+class Itinerario_curso(models.Model):
+    itinerario_id = models.ForeignKey('Itinerario', on_delete=models.CASCADE)
+    curso = models.ForeignKey('Curso', on_delete=models.CASCADE)
+    fecha_agregado = models.DateField()
