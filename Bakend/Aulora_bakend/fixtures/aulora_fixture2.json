@@ -1,0 +1,689 @@
+[
+{
+  "model": "Aulora_bakend.usuario",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$260000$hashadmin1",
+    "last_login": "2025-03-31T11:00:00",
+    "email": "admin1@example.com",
+    "contrasena": "adminpass1",
+    "is_staff": true,
+    "is_superuser": true,
+    "rol": "admin",
+    "nombre": "Administrador Uno",
+    "tipo_cuenta": "PR",
+    "foto_perfil": "usuarios/fotos/admin1.jpg",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "Aulora_bakend.usuario",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$260000$hashprof1",
+    "last_login": "2025-03-31T11:10:00",
+    "email": "profesor1@example.com",
+    "contrasena": "profpass1",
+    "is_staff": true,
+    "is_superuser": false,
+    "rol": "profesor",
+    "nombre": "Profesor Uno",
+    "tipo_cuenta": "PR",
+    "foto_perfil": "usuarios/fotos/profesor1.jpg",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "Aulora_bakend.usuario",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$260000$hashest1",
+    "last_login": "2025-03-31T11:20:00",
+    "email": "estudiante1@example.com",
+    "contrasena": "estpass1",
+    "is_staff": false,
+    "is_superuser": false,
+    "rol": "estudiante",
+    "nombre": "Estudiante Uno",
+    "tipo_cuenta": "FR",
+    "foto_perfil": "usuarios/fotos/estudiante1.png",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "Aulora_bakend.usuario",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$260000$hashprof2",
+    "last_login": "2025-03-31T11:30:00",
+    "email": "profesor2@example.com",
+    "contrasena": "profpass2",
+    "is_staff": true,
+    "is_superuser": false,
+    "rol": "profesor",
+    "nombre": "Profesor Dos",
+    "tipo_cuenta": "PR",
+    "foto_perfil": "usuarios/fotos/profesor2.jpg",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "Aulora_bakend.usuario",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$260000$hashest2",
+    "last_login": "2025-03-31T11:40:00",
+    "email": "estudiante2@example.com",
+    "contrasena": "estpass2",
+    "is_staff": false,
+    "is_superuser": false,
+    "rol": "estudiante",
+    "nombre": "Estudiante Dos",
+    "tipo_cuenta": "FR",
+    "foto_perfil": "usuarios/fotos/estudiante2.png",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "Aulora_bakend.usuario",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$870000$aStmudFMT628uWVmAQlz5d$DfEpedf6ABFG2OBP4ktr8pHfXYxPZ/O3/HPdxToumIw=",
+    "last_login": "2025-03-31T15:48:40.197",
+    "email": "administrator@gmail.com",
+    "contrasena": "admin33",
+    "is_staff": true,
+    "is_superuser": true,
+    "rol": "admin",
+    "nombre": "",
+    "tipo_cuenta": "",
+    "foto_perfil": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "Aulora_bakend.usuario",
+  "pk": 7,
+  "fields": {
+    "password": "pbkdf2_sha256$870000$LLQvhnB0vjM8xVMSvqPMaT$MgaH8hUXMwix/bi/jWOUjsLXkL2z0Rk7znQpp6CeaWo=",
+    "last_login": null,
+    "email": "manolo@gmail.com",
+    "contrasena": "",
+    "is_staff": false,
+    "is_superuser": false,
+    "rol": "2",
+    "nombre": "manolo",
+    "tipo_cuenta": "",
+    "foto_perfil": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "Aulora_bakend.usuario",
+  "pk": 15,
+  "fields": {
+    "password": "pbkdf2_sha256$870000$2gUY2m7Q75l3kYnjkbWM6S$IGoRIT4OZn5VNilXG6zHrlUh6EonlW4iVxBHHxJETYk=",
+    "last_login": null,
+    "email": "ejemplo1@gmail.com",
+    "contrasena": "",
+    "is_staff": false,
+    "is_superuser": false,
+    "rol": "2",
+    "nombre": "ejemplo1",
+    "tipo_cuenta": "FR",
+    "foto_perfil": "usuarios/fotos/IMG_1277_ZWNg68V.jpg",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "Aulora_bakend.usuario",
+  "pk": 16,
+  "fields": {
+    "password": "pbkdf2_sha256$870000$GVZX9SknFvQVlJQkB8VurR$r3Y5e+Zp+KqvU/oBmzgJOKI+qalyw8yafFjm+Hd4+NI=",
+    "last_login": null,
+    "email": "pepito@gmail.com",
+    "contrasena": "abecedario2",
+    "is_staff": false,
+    "is_superuser": false,
+    "rol": "2",
+    "nombre": "poop",
+    "tipo_cuenta": "PR",
+    "foto_perfil": "usuarios/fotos/Captura_de_pantalla_2024-03-05_183251.png",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "Aulora_bakend.usuario",
+  "pk": 17,
+  "fields": {
+    "password": "pbkdf2_sha256$870000$fqwMNESLp0LtqRb4brUHkT$B2CwkcxA0H7ZZJ58yuBxSyPa3LC8kKwnwxxBS5nMx/s=",
+    "last_login": null,
+    "email": "ejemplo2@gmail.com",
+    "contrasena": "abecedario",
+    "is_staff": false,
+    "is_superuser": false,
+    "rol": "3",
+    "nombre": "ejemplo2",
+    "tipo_cuenta": "FR",
+    "foto_perfil": "",
+    "groups": [
+      1
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "Aulora_bakend.usuario",
+  "pk": 18,
+  "fields": {
+    "password": "pbkdf2_sha256$870000$A9fgZDnFwZHIbGmYSDG1CC$jGkHDcab4s4A/wAWs3D6pJiltQvrHiG7jGlPLm2n2Xg=",
+    "last_login": null,
+    "email": "carlitos@gmail.com",
+    "contrasena": "abecedario2",
+    "is_staff": false,
+    "is_superuser": false,
+    "rol": "3",
+    "nombre": "Josema",
+    "tipo_cuenta": "FR",
+    "foto_perfil": "usuarios/fotos/fotoMono.jpg",
+    "groups": [
+      1
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "Aulora_bakend.usuario",
+  "pk": 20,
+  "fields": {
+    "password": "pbkdf2_sha256$870000$f2iHRfrJ4P4snTrCCujv3C$NvQUMPp9ZBABj1FoDW3Wnrhhf0wkQBMFRIyfGz1rFGI=",
+    "last_login": null,
+    "email": "antonio@gmail.com",
+    "contrasena": "abecedario",
+    "is_staff": false,
+    "is_superuser": false,
+    "rol": "2",
+    "nombre": "Antonio",
+    "tipo_cuenta": "FR",
+    "foto_perfil": "defaults/avatar.webp",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "Aulora_bakend.usuario",
+  "pk": 21,
+  "fields": {
+    "password": "pbkdf2_sha256$870000$EedJS3gPUq52aSSAvFgwsa$uVRkc9XcFb2ekPZg7QG0n5zUTCw5nfcyKIAerpm2ExU=",
+    "last_login": null,
+    "email": "profe@gmail.com",
+    "contrasena": "abecedario",
+    "is_staff": false,
+    "is_superuser": false,
+    "rol": "2",
+    "nombre": "Profe",
+    "tipo_cuenta": "FR",
+    "foto_perfil": "defaults/avatar.webp",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "Aulora_bakend.usuario",
+  "pk": 22,
+  "fields": {
+    "password": "pbkdf2_sha256$870000$Mf3y8Xspew3QvnUyK816Xp$WLmbMihuSkXeemv3arSNwwhku0yTgifnXDMjInili0M=",
+    "last_login": null,
+    "email": "estudiante1@gmail.com",
+    "contrasena": "abecedario",
+    "is_staff": false,
+    "is_superuser": false,
+    "rol": "3",
+    "nombre": "estudiante1",
+    "tipo_cuenta": "FR",
+    "foto_perfil": "defaults/avatar.webp",
+    "groups": [
+      3
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "Aulora_bakend.usuario",
+  "pk": 23,
+  "fields": {
+    "password": "pbkdf2_sha256$870000$VJCCxqYyoqEUlDIvYzz7Hu$SaNPPTopsd8T4eYzIMjFBBNmUgaXNPvHBV1zHmN/B2E=",
+    "last_login": null,
+    "email": "profe2@gmail.com",
+    "contrasena": "abecedario",
+    "is_staff": false,
+    "is_superuser": false,
+    "rol": "2",
+    "nombre": "profe2",
+    "tipo_cuenta": "FR",
+    "foto_perfil": "defaults/avatar.webp",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "Aulora_bakend.profesor",
+  "pk": 1,
+  "fields": {
+    "usuario": 2,
+    "materia": "Sin materia"
+  }
+},
+{
+  "model": "Aulora_bakend.profesor",
+  "pk": 2,
+  "fields": {
+    "usuario": 4,
+    "materia": "Sin materia"
+  }
+},
+{
+  "model": "Aulora_bakend.profesor",
+  "pk": 3,
+  "fields": {
+    "usuario": 1,
+    "materia": "Sin materia"
+  }
+},
+{
+  "model": "Aulora_bakend.profesor",
+  "pk": 4,
+  "fields": {
+    "usuario": 3,
+    "materia": "Sin materia"
+  }
+},
+{
+  "model": "Aulora_bakend.profesor",
+  "pk": 5,
+  "fields": {
+    "usuario": 5,
+    "materia": "Sin materia"
+  }
+},
+{
+  "model": "Aulora_bakend.profesor",
+  "pk": 6,
+  "fields": {
+    "usuario": 23,
+    "materia": "Lengua"
+  }
+},
+{
+  "model": "Aulora_bakend.estudiante",
+  "pk": 1,
+  "fields": {
+    "usuario": 3
+  }
+},
+{
+  "model": "Aulora_bakend.estudiante",
+  "pk": 2,
+  "fields": {
+    "usuario": 5
+  }
+},
+{
+  "model": "Aulora_bakend.estudiante",
+  "pk": 3,
+  "fields": {
+    "usuario": 1
+  }
+},
+{
+  "model": "Aulora_bakend.estudiante",
+  "pk": 4,
+  "fields": {
+    "usuario": 2
+  }
+},
+{
+  "model": "Aulora_bakend.estudiante",
+  "pk": 5,
+  "fields": {
+    "usuario": 4
+  }
+},
+{
+  "model": "Aulora_bakend.estudiante",
+  "pk": 6,
+  "fields": {
+    "usuario": 17
+  }
+},
+{
+  "model": "Aulora_bakend.estudiante",
+  "pk": 7,
+  "fields": {
+    "usuario": 18
+  }
+},
+{
+  "model": "Aulora_bakend.estudiante",
+  "pk": 8,
+  "fields": {
+    "usuario": 22
+  }
+},
+{
+  "model": "Aulora_bakend.categoria",
+  "pk": 1,
+  "fields": {
+    "nombre": "Matemáticas"
+  }
+},
+{
+  "model": "Aulora_bakend.categoria",
+  "pk": 2,
+  "fields": {
+    "nombre": "Ciencias"
+  }
+},
+{
+  "model": "Aulora_bakend.categoria",
+  "pk": 3,
+  "fields": {
+    "nombre": "Historia"
+  }
+},
+{
+  "model": "Aulora_bakend.categoria",
+  "pk": 4,
+  "fields": {
+    "nombre": "Lengua"
+  }
+},
+{
+  "model": "Aulora_bakend.categoria",
+  "pk": 5,
+  "fields": {
+    "nombre": "Informática"
+  }
+},
+{
+  "model": "Aulora_bakend.curso",
+  "pk": 1,
+  "fields": {
+    "titulo": "Álgebra Básica",
+    "descripcion": "Introducción al álgebra.",
+    "categoria_id": 1,
+    "precio": 100
+  }
+},
+{
+  "model": "Aulora_bakend.curso",
+  "pk": 2,
+  "fields": {
+    "titulo": "Biología General",
+    "descripcion": "Conceptos fundamentales de biología.",
+    "categoria_id": 2,
+    "precio": 150
+  }
+},
+{
+  "model": "Aulora_bakend.curso",
+  "pk": 3,
+  "fields": {
+    "titulo": "Historia Universal",
+    "descripcion": "Panorama de la historia mundial.",
+    "categoria_id": 3,
+    "precio": 200
+  }
+},
+{
+  "model": "Aulora_bakend.curso",
+  "pk": 4,
+  "fields": {
+    "titulo": "Gramática Española",
+    "descripcion": "Reglas y uso de la lengua española.",
+    "categoria_id": 4,
+    "precio": 80
+  }
+},
+{
+  "model": "Aulora_bakend.curso",
+  "pk": 5,
+  "fields": {
+    "titulo": "Programación en Python",
+    "descripcion": "Introducción a la programación con Python.",
+    "categoria_id": 5,
+    "precio": 250
+  }
+},
+{
+  "model": "Aulora_bakend.modulo",
+  "pk": 1,
+  "fields": {
+    "curso_id": 1,
+    "titulo": "Ecuaciones",
+    "contenido": "Resolución de ecuaciones básicas.",
+    "archivo": "modulos/archivos/ecuaciones.jpg",
+    "tipo_archivo": "foto"
+  }
+},
+{
+  "model": "Aulora_bakend.modulo",
+  "pk": 2,
+  "fields": {
+    "curso_id": 2,
+    "titulo": "Células y Organismos",
+    "contenido": "Estructura y función de las células.",
+    "archivo": "modulos/archivos/celulas.mp4",
+    "tipo_archivo": "video"
+  }
+},
+{
+  "model": "Aulora_bakend.modulo",
+  "pk": 3,
+  "fields": {
+    "curso_id": 3,
+    "titulo": "Guerras y Civilizaciones",
+    "contenido": "Estudio de conflictos históricos.",
+    "archivo": "modulos/archivos/guerras.pdf",
+    "tipo_archivo": "documento"
+  }
+},
+{
+  "model": "Aulora_bakend.modulo",
+  "pk": 4,
+  "fields": {
+    "curso_id": 4,
+    "titulo": "Sintaxis y Redacción",
+    "contenido": "Normas gramaticales y ejercicios de redacción.",
+    "archivo": "modulos/archivos/sintaxis.png",
+    "tipo_archivo": "foto"
+  }
+},
+{
+  "model": "Aulora_bakend.modulo",
+  "pk": 5,
+  "fields": {
+    "curso_id": 5,
+    "titulo": "Variables y Funciones",
+    "contenido": "Introducción a variables, tipos y funciones en Python.",
+    "archivo": "modulos/archivos/variables.docx",
+    "tipo_archivo": "documento"
+  }
+},
+{
+  "model": "Aulora_bakend.itinerario",
+  "pk": 1,
+  "fields": {
+    "titulo": "Itinerario de Matemáticas",
+    "descripcion": "Un recorrido desde lo básico hasta conceptos clave del álgebra.",
+    "progreso": 0
+  }
+},
+{
+  "model": "Aulora_bakend.itinerario",
+  "pk": 2,
+  "fields": {
+    "titulo": "Itinerario de Ciencias Naturales",
+    "descripcion": "Explora biología general y los fundamentos científicos del entorno natural.",
+    "progreso": 0
+  }
+},
+{
+  "model": "Aulora_bakend.itinerario",
+  "pk": 3,
+  "fields": {
+    "titulo": "Itinerario de Tecnología",
+    "descripcion": "Aprende programación con Python y fundamentos de informática.",
+    "progreso": 0
+  }
+},
+{
+  "model": "Aulora_bakend.pago",
+  "pk": 1,
+  "fields": {
+    "usuario_id": 3,
+    "curso_id": 1,
+    "cantidad": 100,
+    "metodo_pago": "TC"
+  }
+},
+{
+  "model": "Aulora_bakend.pago",
+  "pk": 2,
+  "fields": {
+    "usuario_id": 4,
+    "curso_id": 2,
+    "cantidad": 150,
+    "metodo_pago": "PP"
+  }
+},
+{
+  "model": "Aulora_bakend.pago",
+  "pk": 3,
+  "fields": {
+    "usuario_id": 5,
+    "curso_id": 3,
+    "cantidad": 200,
+    "metodo_pago": "TC"
+  }
+},
+{
+  "model": "Aulora_bakend.pago",
+  "pk": 4,
+  "fields": {
+    "usuario_id": 1,
+    "curso_id": 4,
+    "cantidad": 80,
+    "metodo_pago": "PP"
+  }
+},
+{
+  "model": "Aulora_bakend.pago",
+  "pk": 5,
+  "fields": {
+    "usuario_id": 2,
+    "curso_id": 5,
+    "cantidad": 250,
+    "metodo_pago": "TC"
+  }
+},
+{
+  "model": "Aulora_bakend.inscripcion",
+  "pk": 1,
+  "fields": {
+    "usuario": 3,
+    "curso": 1,
+    "fecha_inscripcion": "2025-03-31"
+  }
+},
+{
+  "model": "Aulora_bakend.inscripcion",
+  "pk": 2,
+  "fields": {
+    "usuario": 4,
+    "curso": 2,
+    "fecha_inscripcion": "2025-03-31"
+  }
+},
+{
+  "model": "Aulora_bakend.inscripcion",
+  "pk": 3,
+  "fields": {
+    "usuario": 5,
+    "curso": 3,
+    "fecha_inscripcion": "2025-03-31"
+  }
+},
+{
+  "model": "Aulora_bakend.inscripcion",
+  "pk": 4,
+  "fields": {
+    "usuario": 1,
+    "curso": 4,
+    "fecha_inscripcion": "2025-03-31"
+  }
+},
+{
+  "model": "Aulora_bakend.inscripcion",
+  "pk": 5,
+  "fields": {
+    "usuario": 2,
+    "curso": 5,
+    "fecha_inscripcion": "2025-03-31"
+  }
+},
+{
+  "model": "Aulora_bakend.itinerario_curso",
+  "pk": 101,
+  "fields": {
+    "itinerario_id": 1,
+    "curso": 1,
+    "fecha_agregado": "2025-04-10"
+  }
+},
+{
+  "model": "Aulora_bakend.itinerario_curso",
+  "pk": 102,
+  "fields": {
+    "itinerario_id": 1,
+    "curso": 3,
+    "fecha_agregado": "2025-04-10"
+  }
+},
+{
+  "model": "Aulora_bakend.itinerario_curso",
+  "pk": 103,
+  "fields": {
+    "itinerario_id": 2,
+    "curso": 2,
+    "fecha_agregado": "2025-04-10"
+  }
+},
+{
+  "model": "Aulora_bakend.itinerario_curso",
+  "pk": 104,
+  "fields": {
+    "itinerario_id": 2,
+    "curso": 4,
+    "fecha_agregado": "2025-04-10"
+  }
+},
+{
+  "model": "Aulora_bakend.itinerario_curso",
+  "pk": 105,
+  "fields": {
+    "itinerario_id": 3,
+    "curso": 5,
+    "fecha_agregado": "2025-04-10"
+  }
+}
+]
