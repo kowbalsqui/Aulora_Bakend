@@ -25,7 +25,8 @@ def register_view(request):
             if rol == Usuario.PROFESOR:
                 grupo = Group.objects.get(name='Profesores')
                 user.groups.add(grupo)
-                Profesor.objects.get_or_create(usuario=user)
+                materia = request.data.get('materia')
+                Profesor.objects.get_or_create(usuario=user, materia= materia)
             elif rol == Usuario.ESTUDIANTE:
                 grupo = Group.objects.get(name='Estudiantes')
                 user.groups.add(grupo)

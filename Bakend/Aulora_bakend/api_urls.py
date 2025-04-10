@@ -10,7 +10,9 @@ router.register(r'cursos', CursoViewSet)
 router.register(r'modulos', ModuloViewSet)
 router.register(r'pagos', PagoViewSet)
 router.register(r'inscripciones', InscripcionViewSet)
+router.register(r'itinerarios', ItinerarioViewSet)
 router.register(r'mis-cursos', MisCursosViewSet, basename='mis-cursos')
+router.register(r'mis-itinerarios', MisItinerariosViewSet, basename='mis-itinerarios')
 
 urlpatterns = [
     path('', include(router.urls)),  # <- solo esto

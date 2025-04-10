@@ -54,6 +54,15 @@ class InscripcionSerializer(serializers.ModelSerializer):
         model = Inscripcion
         fields = ['id', 'usuario', 'curso', 'fecha_inscripcion']
 
+
+# Serializer para Itinerario
+class ItinerarioSerializer(serializers.ModelSerializer):
+    cursos = CursoSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Itinerario
+        fields = ['id', 'titulo', 'descripcion', 'cursos']
+
 #Serializer para el regustro de los usuarios
     
 from rest_framework import serializers
@@ -67,6 +76,7 @@ class UsuarioSerializerRegistro(serializers.Serializer):
     rol = serializers.IntegerField()
     tipo_cuenta = serializers.ChoiceField(choices=Usuario.TIPO_CUENTA)
     foto_perfil = serializers.ImageField(required=False, allow_null=True)
+    materia = serializers.CharField(max_length=50, required=False, allow_blank=True)
 
     def validate_email(self, email):
         if Usuario.objects.filter(email=email).exists():
@@ -97,10 +107,16 @@ class UsuarioSerializerRegistro(serializers.Serializer):
         # Guardar la contraseña sin cifrar en el campo personalizado 'contraseña'
         validated_data['contrasena'] = raw_password
 
+        #Guarda el campo de la materia si tiene o viene algo 
+        materia = validated_data.pop('materia', None)  
+
         # Crear el usuario
         user = Usuario(**validated_data)
         user.set_password(raw_password)
         user.save()
+
+        if user.rol == 2 and materia:
+            Profesor.objects.create(usuario=user, materia=materia)
         return user
 
 #Serializer para el modificar perfil del usuario

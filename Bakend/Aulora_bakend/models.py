@@ -73,6 +73,9 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 # Clase del modelo de Rol Profesor
 class Profesor(models.Model): 
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
+    # Campos adicionales para el profesor
+    materia = models.CharField(max_length=50, default='Sin materia')
+
 
 # Clase del modelo de Rol Estudiante
 class Estudiante(models.Model): 
@@ -110,7 +113,8 @@ class Modulo(models.Model):
 
 class Itinerario(models.Model):
     titulo = models.CharField(max_length=50)
-    descripcion = models.CharField(max_length=300)  
+    descripcion = models.CharField(max_length=300) 
+    progreso = models.IntegerField(default=0) 
     cursos = models.ManyToManyField(Curso, related_name='itinerario', through='Itinerario_curso')
 
 
