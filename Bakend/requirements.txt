@@ -8,3 +8,5 @@ djangorestframework~=3.14.0
 django-oauth-toolkit~=3.0.1
 Pillow~=11.0.0
 django-cors-headers
+django-filter~=23.1
+django-extensions~=3.2.1

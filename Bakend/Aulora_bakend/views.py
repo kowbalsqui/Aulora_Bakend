@@ -1,8 +1,10 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 from .models import *
 from .serializers import *
 from django.shortcuts import render,redirect
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from django_filters.rest_framework import DjangoFilterBackend
+
 
 
 def inicio(request):
@@ -13,10 +15,12 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     serializer_class = UsuarioSerializer
 
 class CategoriaViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     queryset = Categoria.objects.all()
     serializer_class = CategoriaSerializer
 
 class CursoViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     queryset = Curso.objects.all()
     serializer_class = CursoSerializer
     permission_classes = [IsAuthenticated]
@@ -79,3 +83,30 @@ class MisItinerariosViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return Itinerario.objects.filter(cursos__inscripciones__usuario=self.request.user)
+    
+class CursoExploraViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Curso.objects.all()
+    serializer_class = CursoSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    permission_classes = [AllowAny] # Permitir acceso a todos los usuarios, incluso no autenticados
+
+    # Campos para búsqueda libre (por texto)
+    search_fields = ['titulo', 'descripcion', 'categoria_id__nombre']
+
+    # Filtros exactos por campo
+    filterset_fields = ['categoria_id']
+
+    # Ordenación
+    ordering_fields = ['precio', 'titulo']
+
+class ItinerarioExplorarViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Itinerario.objects.all()
+    serializer_class = ItinerarioSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    permission_classes = [AllowAny] # Permitir acceso a todos los usuarios, incluso no autenticados
+
+    # Campos para búsqueda libre (por texto)
+    search_fields = ['titulo', 'descripcion']
+
+    # Ordenación
+    ordering_fields = ['titulo']
