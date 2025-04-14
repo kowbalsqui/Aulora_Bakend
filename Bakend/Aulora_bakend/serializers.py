@@ -19,25 +19,25 @@ class CategoriaSerializer(serializers.ModelSerializer):
         model = Categoria
         fields = ['id', 'nombre']
 
+# Serializer para Modulo
+class ModuloSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Modulo
+        fields = ['id', 'curso_id', 'titulo', 'contenido', 'tipo_archivo', 'archivo']
+    
 # Serializer para Curso
 class CursoSerializer(serializers.ModelSerializer):
     categoria_id = serializers.PrimaryKeyRelatedField(
         queryset=Categoria.objects.all()
     )
+    modulos = ModuloSerializer(many=True, read_only=True, source='modulo_set')
+    inscritos = serializers.PrimaryKeyRelatedField(many=True, read_only=True, source='inscripciones')
     categoria_nombre = serializers.CharField(source='categoria_id.nombre', read_only=True)
     inscripcion = UsuarioSerializer(many=True, read_only=True)
 
     class Meta:
         model = Curso
-        fields = ['id', 'titulo', 'descripcion', 'categoria_id', 'precio', 'inscripcion', 'foto', 'categoria_nombre']
-
-# Serializer para Modulo
-class ModuloSerializer(serializers.ModelSerializer):
-    curso_id = CursoSerializer()
-
-    class Meta:
-        model = Modulo
-        fields = ['id', 'curso_id', 'titulo', 'contenido', 'tipo_archivo', 'archivo']
+        fields = ['id', 'titulo', 'descripcion', 'categoria_id', 'precio', 'inscripcion', 'foto', 'categoria_nombre', 'modulos', 'inscritos']
 
 # Serializer para Pago
 class PagoSerializer(serializers.ModelSerializer):

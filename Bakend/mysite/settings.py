@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'corsheaders',  # Para manejar CORS (peticiones desde Angular)
     'Aulora_bakend',  # Tu aplicación
     'django.contrib.auth',  # Sistema de autenticación
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -118,7 +119,7 @@ DATABASES = {
         'USER': 'aulora_user',      # El usuario que creaste
         'PASSWORD': 'Aulora',       # La contraseña que asignaste
         'HOST': 'localhost',        # Si PostgreSQL está en la misma máquina
-        'PORT': '5433',             # Puerto por defecto de PostgreSQL
+        'PORT': '5432',             # Puerto por defecto de PostgreSQL
     }
 }
 

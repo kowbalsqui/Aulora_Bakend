@@ -1,7 +1,10 @@
+from rest_framework.response import Response
+from rest_framework import status
 from rest_framework import viewsets, filters
 from .models import *
 from .serializers import *
 from django.shortcuts import render,redirect
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -20,34 +23,63 @@ class CategoriaViewSet(viewsets.ModelViewSet):
     serializer_class = CategoriaSerializer
 
 class CursoViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
     queryset = Curso.objects.all()
     serializer_class = CursoSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
-        print("🔎 Usuario logueado:", user.email)
-        print("🔎 Rol:", user.rol)
 
-        #Si el usuario es un profesor, filtra los cursos por la materia que imparte comparando con el campo de la categoria del curso
+        # 👨‍🏫 Filtrado para profesores
         if user.rol == "2":
-            profesor = user.profesor
-            materia = profesor.materia
-            print("🔎 Materia del profesor:", materia)
+            try:
+                materia = user.profesor.materia.strip()
+                print(f"🔍 Filtrando cursos por materia: {materia}")
+                return Curso.objects.filter(categoria__nombre__iexact=materia)
+            except Profesor.DoesNotExist:
+                print("⚠️ Profesor no tiene materia asignada")
+                return Curso.objects.none()
 
-            cursos = Curso.objects.filter(categoria_id__nombre__iexact=materia)
-            print("🔎 Cursos encontrados:", cursos.count())
+        # 👨‍🎓 Estudiantes y otros ven todos
+        return Curso.objects.exclude(inscripcion=user)
 
-            for curso in cursos:
-                print(f"  - {curso.titulo} ({curso.categoria_id.nombre})")
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        user = request.user
 
-            return cursos
-        return super().get_queryset()
+        # ❌ Bloqueo para estudiantes no inscritos
+        if user.rol == "3":
+            if not instance.inscripcion.filter(id=user.id).exists():
+                return Response(
+                    {'detail': 'No estás inscrito en este curso.'},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+
+        return super().retrieve(request, *args, **kwargs)
+
+    @action(detail=True, methods=['post'], url_path='inscribirse')
+    def inscribirse(self, request, pk=None):
+        print(f"📥 Intentando inscribir al curso ID: {pk}")
+
+        try:
+            curso = Curso.objects.get(pk=pk)
+        except Curso.DoesNotExist:
+            print("❌ Curso no encontrado")
+            return Response({'detail': 'Curso no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+
+        user = request.user
+
+        if curso.inscripcion.filter(id=user.id).exists():
+            print("⚠️ Usuario ya inscrito en el curso.")
+            return Response({'detail': 'Ya estás inscrito.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        curso.inscripcion.add(user)
+        return Response({'detail': 'Inscripción exitosa'}, status=status.HTTP_200_OK)
 
 class ModuloViewSet(viewsets.ModelViewSet):
     queryset = Modulo.objects.all()
     serializer_class = ModuloSerializer
+    permission_classes = [IsAuthenticated]
 
 class PagoViewSet(viewsets.ModelViewSet):
     queryset = Pago.objects.all()
