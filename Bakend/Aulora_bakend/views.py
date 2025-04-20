@@ -30,18 +30,22 @@ class CursoViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
 
-        # 👨‍🏫 Filtrado para profesores
+        # 👨‍🏫 PROFESOR: solo cursos de su materia
         if user.rol == "2":
             try:
                 materia = user.profesor.materia.strip()
-                print(f"🔍 Filtrando cursos por materia: {materia}")
                 return Curso.objects.filter(categoria__nombre__iexact=materia)
             except Profesor.DoesNotExist:
-                print("⚠️ Profesor no tiene materia asignada")
                 return Curso.objects.none()
 
-        # 👨‍🎓 Estudiantes y otros ven todos
-        return Curso.objects.exclude(inscripcion=user)
+        # 👨‍🎓 ESTUDIANTE: cursos en los que está inscrito
+        if user.rol == "3":
+            if self.action == 'list':  # Esto evita el problema en el detalle
+                return Curso.objects.exclude(inscripcion=user)
+            return Curso.objects.all()
+
+        # ADMIN u otro rol
+        return Curso.objects.all()
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()

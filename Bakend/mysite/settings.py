@@ -65,6 +65,10 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",  # URL de tu frontend Angular
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+
 # Configurar Django REST Framework
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
