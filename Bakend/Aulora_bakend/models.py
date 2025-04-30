@@ -98,7 +98,7 @@ class Curso(models.Model):
 class Modulo(models.Model): 
     curso_id = models.ForeignKey(Curso, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=50)
-    contenido = models.CharField(max_length=300)
+    contenido = models.CharField(3000)
     # Campos para almacenar un archivo (foto, video, documento) asociado al módulo
     archivo = models.FileField(upload_to='modulos/archivos/', blank=True, null=True)
     tipo_archivo = models.CharField(

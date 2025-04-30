@@ -18,7 +18,7 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     serializer_class = UsuarioSerializer
 
 class CategoriaViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     queryset = Categoria.objects.all()
     serializer_class = CategoriaSerializer
 
@@ -29,23 +29,31 @@ class CursoViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-
-        # 👨‍🏫 PROFESOR: solo cursos de su materia
         if user.rol == "2":
             try:
                 materia = user.profesor.materia.strip()
-                return Curso.objects.filter(categoria__nombre__iexact=materia)
-            except Profesor.DoesNotExist:
+                return Curso.objects.filter(categoria_id__nombre__iexact=materia)
+            except (AttributeError, Profesor.DoesNotExist):
                 return Curso.objects.none()
-
-        # 👨‍🎓 ESTUDIANTE: cursos en los que está inscrito
         if user.rol == "3":
-            if self.action == 'list':  # Esto evita el problema en el detalle
+            if self.action == 'list':
                 return Curso.objects.exclude(inscripcion=user)
             return Curso.objects.all()
-
-        # ADMIN u otro rol
         return Curso.objects.all()
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        if hasattr(user, 'profesor'):
+            materia = user.profesor.materia.strip()
+            categoria = Categoria.objects.filter(nombre__iexact=materia).first()
+            if categoria:
+                serializer.save(categoria_id=categoria)
+                print(f"✅ Curso creado para materia: {materia} → categoría: {categoria}")
+
+            else:
+                raise serializers.ValidationError("No se encontró una categoría que coincida con tu materia.")
+        else:
+            raise serializers.ValidationError("Solo los profesores pueden crear cursos.")
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -102,7 +110,7 @@ class ItinerarioViewSet(viewsets.ModelViewSet):
         user = self.request.user
 
         if user.rol == "2":
-            materia = user.materia
+            materia = user.profesor.materia
             return Itinerario.objects.filter(cursos__categoria_id__nombre__iexact=materia).distinct()
         return super().get_queryset()
 
