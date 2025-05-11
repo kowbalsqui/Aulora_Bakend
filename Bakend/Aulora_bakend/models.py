@@ -98,7 +98,7 @@ class Curso(models.Model):
 class Modulo(models.Model): 
     curso_id = models.ForeignKey(Curso, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=50)
-    contenido = models.CharField(3000)
+    contenido = models.TextField()
     # Campos para almacenar un archivo (foto, video, documento) asociado al módulo
     archivo = models.FileField(upload_to='modulos/archivos/', blank=True, null=True)
     tipo_archivo = models.CharField(
@@ -140,3 +140,27 @@ class Itinerario_curso(models.Model):
     itinerario_id = models.ForeignKey('Itinerario', on_delete=models.CASCADE)
     curso = models.ForeignKey('Curso', on_delete=models.CASCADE)
     fecha_agregado = models.DateField()
+
+# Clase nueva agregada llamada Progreso, modelo relacional con usuario y cursos, previamente con Itinerarios
+
+class Progreso(models.Model):
+    usuario = models.ForeignKey('Usuario', on_delete=models.CASCADE)
+    curso = models.ForeignKey('Curso', on_delete=models.CASCADE)
+    porcentaje = models.FloatField(default=0.0)
+
+    actualizado = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('usuario', 'curso')
+
+    def __str__(self):
+        return f"{self.usuario} - {self.curso} : {self.porcentaje}%"
+    
+class ModuloCompletado(models.Model):
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    modulo = models.ForeignKey(Modulo, on_delete=models.CASCADE)
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('usuario', 'modulo')
+

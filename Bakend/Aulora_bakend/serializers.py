@@ -34,10 +34,21 @@ class CursoSerializer(serializers.ModelSerializer):
     inscritos = serializers.PrimaryKeyRelatedField(many=True, read_only=True, source='inscripciones')
     categoria_nombre = serializers.CharField(source='categoria_id.nombre', read_only=True)
     inscripcion = UsuarioSerializer(many=True, read_only=True)
+    progreso_usuario = serializers.SerializerMethodField()  # ✅ nuevo campo
 
     class Meta:
         model = Curso
-        fields = ['id', 'titulo', 'descripcion', 'categoria_id', 'precio', 'inscripcion', 'foto', 'categoria_nombre', 'modulos', 'inscritos']
+        fields = [
+            'id', 'titulo', 'descripcion', 'categoria_id', 'precio', 'inscripcion',
+            'foto', 'categoria_nombre', 'modulos', 'inscritos', 'progreso_usuario'  # ✅ añadir aquí también
+        ]
+
+    def get_progreso_usuario(self, obj):
+        user = self.context['request'].user
+        if user.is_authenticated and user.rol == "3":
+            progreso = Progreso.objects.filter(usuario=user, curso=obj).first()
+            return progreso.porcentaje if progreso else 0
+        return None
 
 # Serializer para Pago
 class PagoSerializer(serializers.ModelSerializer):
@@ -164,3 +175,14 @@ class GetDatosPerfil(serializers.ModelSerializer):
         extra_kwargs = {
             'contrasena': {'write_only': True}
         }
+
+class ProgresoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Progreso
+        fields = ['id', 'usuario', 'curso', 'porcentaje', 'actualizado']
+
+    def get_queryset(self):
+        return Progreso.objects.filter(usuario=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(usuario=self.request.user)

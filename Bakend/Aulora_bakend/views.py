@@ -86,12 +86,51 @@ class CursoViewSet(viewsets.ModelViewSet):
             return Response({'detail': 'Ya estás inscrito.'}, status=status.HTTP_400_BAD_REQUEST)
 
         curso.inscripcion.add(user)
+
+        # ⏳ Crear o asegurar progreso inicial
+        progreso, created = Progreso.objects.get_or_create(
+            usuario=user,
+            curso=curso,
+            defaults={'porcentaje': 0}
+        )
+
+        if created:
+            print(f"🆕 Progreso creado para usuario {user.id} en curso {curso.id}")
+        else:
+            print(f"🔄 Progreso ya existía para usuario {user.id} en curso {curso.id}")
+
         return Response({'detail': 'Inscripción exitosa'}, status=status.HTTP_200_OK)
 
 class ModuloViewSet(viewsets.ModelViewSet):
     queryset = Modulo.objects.all()
     serializer_class = ModuloSerializer
     permission_classes = [IsAuthenticated]
+
+    @action(detail=True, methods=['post'], url_path='completar')
+    def completar(self, request, pk=None):
+        user = request.user
+        modulo = self.get_object()
+        curso = modulo.curso_id
+
+        # Obtener total de módulos del curso
+        total_modulos = curso.modulo_set.count()
+
+        # Aquí puedes definir cómo contar cuántos ha completado el usuario
+        # Por ahora, asumimos que cada llamada suma un módulo
+        progreso, _ = Progreso.objects.get_or_create(usuario=user, curso=curso)
+        modulos_actuales = curso.modulo_set.count()
+
+        # Por ejemplo, si el usuario completa un módulo, suponemos que avanza en +1 módulo
+        # Incrementamos un % fijo por módulo (esto NO es persistente si no guardas qué completó)
+        porcentaje_unitario = 100 / total_modulos
+        nuevo_porcentaje = min(100, progreso.porcentaje + porcentaje_unitario)
+        progreso.porcentaje = round(nuevo_porcentaje)
+        progreso.save()
+
+        return Response({
+            'detail': '✅ Módulo marcado como completado',
+            'nuevo_progreso': progreso.porcentaje
+        })
 
 class PagoViewSet(viewsets.ModelViewSet):
     queryset = Pago.objects.all()
@@ -154,3 +193,11 @@ class ItinerarioExplorarViewSet(viewsets.ReadOnlyModelViewSet):
 
     # Ordenación
     ordering_fields = ['titulo']
+
+
+class ProgresoCursoViewSet(viewsets.ModelViewSet):
+    serializer_class = ProgresoSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Progreso.objects.filter(usuario=self.request.user)
