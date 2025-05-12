@@ -94,7 +94,7 @@ class Curso(models.Model):
     categoria_id = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     precio = models.IntegerField()
     inscripcion = models.ManyToManyField(Usuario, related_name='inscripcion', through='Inscripcion')
-    foto = models.ImageField(upload_to='cursos/', blank=True, null=True, default='defaults/course.webp')
+    foto = models.ImageField(upload_to='cursos/', blank=True, null=True, default='defaults/dcursos.png', help_text='.')
 
 # Clase del modelo de Módulo
 class Modulo(models.Model): 

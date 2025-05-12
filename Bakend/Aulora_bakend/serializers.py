@@ -179,7 +179,7 @@ class ModificaPerfilUsuario(serializers.ModelSerializer):
 class GetDatosPerfil(serializers.ModelSerializer):
     class Meta: 
         model= Usuario
-        fields= ['nombre', 'foto_perfil', 'contrasena', 'tipo_cuenta']
+        fields= ['nombre', 'foto_perfil', 'contrasena', 'tipo_cuenta', 'cursos_completados']
         extra_kwargs = {
             'contrasena': {'write_only': True}
         }

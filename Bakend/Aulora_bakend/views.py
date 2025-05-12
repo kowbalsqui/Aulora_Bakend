@@ -31,24 +31,23 @@ class CursoViewSet(viewsets.ModelViewSet):
         user = self.request.user
         queryset = Curso.objects.all()
 
-        if user.rol == "2":
+        if user.rol == "2":  # Profesor
             try:
                 materia = user.profesor.materia.strip()
                 queryset = Curso.objects.filter(categoria_id__nombre__iexact=materia)
             except (AttributeError, Profesor.DoesNotExist):
                 return Curso.objects.none()
 
-        elif user.rol == "3":
+        elif user.rol == "3":  # Estudiante
             if self.action == 'list':
                 queryset = Curso.objects.exclude(inscripcion=user)
 
-        # 🔽 Si viene el parámetro `?limit=5`, aplicamos el corte
+        # Aplicar límite si se pasa ?limit=5
         limit = self.request.query_params.get('limit')
         if limit and limit.isdigit():
             return queryset[:int(limit)]
 
         return queryset
-
 
     def perform_create(self, serializer):
         user = self.request.user
@@ -58,7 +57,6 @@ class CursoViewSet(viewsets.ModelViewSet):
             if categoria:
                 serializer.save(categoria_id=categoria)
                 print(f"✅ Curso creado para materia: {materia} → categoría: {categoria}")
-
             else:
                 raise serializers.ValidationError("No se encontró una categoría que coincida con tu materia.")
         else:
@@ -68,13 +66,12 @@ class CursoViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         user = request.user
 
-        # ❌ Bloqueo para estudiantes no inscritos
-        if user.rol == "3":
-            if not instance.inscripcion.filter(id=user.id).exists():
-                return Response(
-                    {'detail': 'No estás inscrito en este curso.'},
-                    status=status.HTTP_403_FORBIDDEN
-                )
+        # Bloqueo para estudiantes no inscritos
+        if user.rol == "3" and not instance.inscripcion.filter(id=user.id).exists():
+            return Response(
+                {'detail': 'No estás inscrito en este curso.'},
+                status=status.HTTP_403_FORBIDDEN
+            )
 
         return super().retrieve(request, *args, **kwargs)
 
@@ -96,7 +93,7 @@ class CursoViewSet(viewsets.ModelViewSet):
 
         curso.inscripcion.add(user)
 
-        # ⏳ Crear o asegurar progreso inicial
+        # Crear o asegurar progreso inicial
         progreso, created = Progreso.objects.get_or_create(
             usuario=user,
             curso=curso,
@@ -108,7 +105,19 @@ class CursoViewSet(viewsets.ModelViewSet):
         else:
             print(f"🔄 Progreso ya existía para usuario {user.id} en curso {curso.id}")
 
+        # Verificar si ya había completado todos los demás cursos
+        if progreso.porcentaje == 100:
+            cursos_completados_ids = Progreso.objects.filter(
+                usuario=user,
+                porcentaje=100
+            ).exclude(curso=curso).values_list('curso', flat=True)
+
+            if curso.id not in cursos_completados_ids:
+                user.cursos_completados += 1
+                user.save()
+
         return Response({'detail': 'Inscripción exitosa'}, status=status.HTTP_200_OK)
+
 
 class ModuloViewSet(viewsets.ModelViewSet):
     queryset = Modulo.objects.all()
@@ -121,31 +130,42 @@ class ModuloViewSet(viewsets.ModelViewSet):
         modulo = self.get_object()
         curso = modulo.curso_id
 
-        # ✅ Marcar módulo como completado (solo si no lo está ya)
+        print(f"➡️ Módulo {modulo.id} completado del curso {curso.id} por {user.email}")
+
         ModuloCompletado.objects.get_or_create(usuario=user, modulo=modulo)
 
-        # ✅ Actualizar progreso del curso
         total_modulos = curso.modulo_set.count()
         completados = ModuloCompletado.objects.filter(usuario=user, modulo__curso_id=curso.id).count()
+
+        print(f"📊 Total módulos: {total_modulos}, Completados por usuario: {completados}")
 
         progreso, _ = Progreso.objects.get_or_create(usuario=user, curso=curso)
         progreso.porcentaje = round((completados / total_modulos) * 100) if total_modulos > 0 else 0
         progreso.save()
 
-        # ✅ Actualizar progreso de todos los itinerarios donde esté inscrito
-        for itinerario in curso.itinerario.filter(inscritos=user):
-            actualizar_progreso_itinerario(user, itinerario)
+        print(f"✅ Progreso guardado: {progreso.porcentaje}%")
 
         if progreso.porcentaje == 100:
-            if not curso in Progreso.objects.filter(usuario=user, porcentaje=100).exclude(curso=curso).values_list('curso', flat=True):
-                user.cursos_completados += 1
-                user.save()
+            print("🎯 Curso completado al 100%")
+
+            ya_contado = Progreso.objects.filter(usuario=user, curso=curso, porcentaje=100).exists()
+            if ya_contado:
+                otros_completados = Progreso.objects.filter(usuario=user, porcentaje=100).exclude(curso=curso)
+                print(f"🧮 Cursos ya contados (distintos): {otros_completados.values_list('curso', flat=True)}")
+
+                if curso.id not in otros_completados.values_list('curso', flat=True):
+                    user.cursos_completados += 1
+                    user.save()
+                    print(f"🏆 Usuario {user.email} ahora tiene {user.cursos_completados} cursos completados")
+
+        for itinerario in curso.itinerario.filter(inscritos=user):
+            actualizar_progreso_itinerario(user, itinerario)
 
         return Response({
             'detail': '✅ Módulo completado',
             'progreso_curso': progreso.porcentaje
         })
-    
+
 
 class PagoViewSet(viewsets.ModelViewSet):
     queryset = Pago.objects.all()
@@ -229,6 +249,7 @@ class ProgresoCursoViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Progreso.objects.filter(usuario=self.request.user)
+
     
 def actualizar_progreso_itinerario(usuario, itinerario):
     cursos = itinerario.cursos.all()
