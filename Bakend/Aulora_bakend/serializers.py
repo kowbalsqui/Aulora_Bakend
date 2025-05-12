@@ -5,7 +5,7 @@ from .models import *
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
-        fields = ['id', 'email', 'contrasena', 'nombre', 'tipo_cuenta', 'foto_perfil', 'rol']
+        fields = ['id', 'email', 'contrasena', 'nombre', 'tipo_cuenta','cursos_completados', 'foto_perfil', 'rol']
 
     def create(self, validated_data):
         password = validated_data.pop('contrasena')  # Extraemos la contraseña
@@ -72,10 +72,18 @@ class InscripcionSerializer(serializers.ModelSerializer):
 # Serializer para Itinerario
 class ItinerarioSerializer(serializers.ModelSerializer):
     cursos = CursoSerializer(many=True, read_only=True)
+    inscritos = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    inscrito = serializers.SerializerMethodField()
 
     class Meta:
         model = Itinerario
-        fields = ['id', 'titulo', 'descripcion', 'cursos']
+        fields = ['id', 'titulo', 'descripcion', 'progreso', 'cursos', 'inscrito', 'inscritos']
+
+    def get_inscrito(self, obj):
+        user = self.context['request'].user
+        if user.is_authenticated:
+            return obj.inscritos.filter(id=user.id).exists()
+        return False
 
 #Serializer para el regustro de los usuarios
     

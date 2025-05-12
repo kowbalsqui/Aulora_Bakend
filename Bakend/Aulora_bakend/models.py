@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.utils import timezone
+from django.conf import settings  # si no lo tienes aún
 
 class UsuarioManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -42,6 +43,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     rol = models.CharField(max_length=20, choices=ROLES, default='admin')
     nombre = models.CharField(max_length=20)
+    cursos_completados = models.IntegerField(default=0)
     TIPO_CUENTA = [
         ('FR', 'Gratuita'), 
         ('PR', 'Premium'), 
@@ -114,9 +116,16 @@ class Modulo(models.Model):
 
 class Itinerario(models.Model):
     titulo = models.CharField(max_length=50)
-    descripcion = models.CharField(max_length=300) 
-    progreso = models.IntegerField(default=0) 
+    descripcion = models.CharField(max_length=300)
+    progreso = models.IntegerField(default=0)
     cursos = models.ManyToManyField(Curso, related_name='itinerario', through='Itinerario_curso')
+    precio = models.IntegerField(default=0)
+
+    inscritos = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='itinerarios_inscritos',
+        blank=True
+    )
 
 
 # Clase del modelo de Pago

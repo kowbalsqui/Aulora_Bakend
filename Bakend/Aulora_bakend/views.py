@@ -29,17 +29,26 @@ class CursoViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
+        queryset = Curso.objects.all()
+
         if user.rol == "2":
             try:
                 materia = user.profesor.materia.strip()
-                return Curso.objects.filter(categoria_id__nombre__iexact=materia)
+                queryset = Curso.objects.filter(categoria_id__nombre__iexact=materia)
             except (AttributeError, Profesor.DoesNotExist):
                 return Curso.objects.none()
-        if user.rol == "3":
+
+        elif user.rol == "3":
             if self.action == 'list':
-                return Curso.objects.exclude(inscripcion=user)
-            return Curso.objects.all()
-        return Curso.objects.all()
+                queryset = Curso.objects.exclude(inscripcion=user)
+
+        # 🔽 Si viene el parámetro `?limit=5`, aplicamos el corte
+        limit = self.request.query_params.get('limit')
+        if limit and limit.isdigit():
+            return queryset[:int(limit)]
+
+        return queryset
+
 
     def perform_create(self, serializer):
         user = self.request.user
@@ -112,25 +121,31 @@ class ModuloViewSet(viewsets.ModelViewSet):
         modulo = self.get_object()
         curso = modulo.curso_id
 
-        # Obtener total de módulos del curso
+        # ✅ Marcar módulo como completado (solo si no lo está ya)
+        ModuloCompletado.objects.get_or_create(usuario=user, modulo=modulo)
+
+        # ✅ Actualizar progreso del curso
         total_modulos = curso.modulo_set.count()
+        completados = ModuloCompletado.objects.filter(usuario=user, modulo__curso_id=curso.id).count()
 
-        # Aquí puedes definir cómo contar cuántos ha completado el usuario
-        # Por ahora, asumimos que cada llamada suma un módulo
         progreso, _ = Progreso.objects.get_or_create(usuario=user, curso=curso)
-        modulos_actuales = curso.modulo_set.count()
-
-        # Por ejemplo, si el usuario completa un módulo, suponemos que avanza en +1 módulo
-        # Incrementamos un % fijo por módulo (esto NO es persistente si no guardas qué completó)
-        porcentaje_unitario = 100 / total_modulos
-        nuevo_porcentaje = min(100, progreso.porcentaje + porcentaje_unitario)
-        progreso.porcentaje = round(nuevo_porcentaje)
+        progreso.porcentaje = round((completados / total_modulos) * 100) if total_modulos > 0 else 0
         progreso.save()
 
+        # ✅ Actualizar progreso de todos los itinerarios donde esté inscrito
+        for itinerario in curso.itinerario.filter(inscritos=user):
+            actualizar_progreso_itinerario(user, itinerario)
+
+        if progreso.porcentaje == 100:
+            if not curso in Progreso.objects.filter(usuario=user, porcentaje=100).exclude(curso=curso).values_list('curso', flat=True):
+                user.cursos_completados += 1
+                user.save()
+
         return Response({
-            'detail': '✅ Módulo marcado como completado',
-            'nuevo_progreso': progreso.porcentaje
+            'detail': '✅ Módulo completado',
+            'progreso_curso': progreso.porcentaje
         })
+    
 
 class PagoViewSet(viewsets.ModelViewSet):
     queryset = Pago.objects.all()
@@ -152,6 +167,18 @@ class ItinerarioViewSet(viewsets.ModelViewSet):
             materia = user.profesor.materia
             return Itinerario.objects.filter(cursos__categoria_id__nombre__iexact=materia).distinct()
         return super().get_queryset()
+    
+
+    @action(detail=True, methods=['post'], url_path='inscribirse')
+    def inscribirse(self, request, pk=None):
+        itinerario = self.get_object()
+        user = request.user
+
+        if itinerario.inscritos.filter(id=user.id).exists():
+            return Response({'detail': 'Ya estás inscrito en este itinerario.'}, status=400)
+
+        itinerario.inscritos.add(user)
+        return Response({'detail': 'Inscripción al itinerario completada.'}, status=200)
 
 class MisCursosViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = CursoSerializer
@@ -165,7 +192,8 @@ class MisItinerariosViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Itinerario.objects.filter(cursos__inscripciones__usuario=self.request.user)
+        print(self.request.user)
+        return Itinerario.objects.filter(inscritos=self.request.user)
     
 class CursoExploraViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Curso.objects.all()
@@ -201,3 +229,12 @@ class ProgresoCursoViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Progreso.objects.filter(usuario=self.request.user)
+    
+def actualizar_progreso_itinerario(usuario, itinerario):
+    cursos = itinerario.cursos.all()
+    total_modulos = Modulo.objects.filter(curso_id__in=cursos).count()
+    completados = ModuloCompletado.objects.filter(usuario=usuario, modulo__curso_id__in=cursos).count()
+
+    progreso = int((completados / total_modulos) * 100) if total_modulos > 0 else 0
+    itinerario.progreso = progreso
+    itinerario.save()
