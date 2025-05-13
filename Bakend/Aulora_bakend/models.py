@@ -94,7 +94,7 @@ class Curso(models.Model):
     categoria_id = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     precio = models.IntegerField()
     inscripcion = models.ManyToManyField(Usuario, related_name='inscripcion', through='Inscripcion')
-    foto = models.ImageField(upload_to='cursos/', blank=True, null=True, default='defaults/dcursos.png', help_text='.')
+    foto = models.ImageField(upload_to='cursos/', blank=True, null=True, default='defaults/dcursos.png')
 
 # Clase del modelo de Módulo
 class Modulo(models.Model): 
@@ -149,6 +149,7 @@ class Itinerario_curso(models.Model):
     itinerario_id = models.ForeignKey('Itinerario', on_delete=models.CASCADE)
     curso = models.ForeignKey('Curso', on_delete=models.CASCADE)
     fecha_agregado = models.DateField()
+
 
 # Clase nueva agregada llamada Progreso, modelo relacional con usuario y cursos, previamente con Itinerarios
 

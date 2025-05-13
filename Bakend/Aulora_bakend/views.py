@@ -253,9 +253,18 @@ class ProgresoCursoViewSet(viewsets.ModelViewSet):
     
 def actualizar_progreso_itinerario(usuario, itinerario):
     cursos = itinerario.cursos.all()
-    total_modulos = Modulo.objects.filter(curso_id__in=cursos).count()
-    completados = ModuloCompletado.objects.filter(usuario=usuario, modulo__curso_id__in=cursos).count()
+    total_cursos = cursos.count()
 
-    progreso = int((completados / total_modulos) * 100) if total_modulos > 0 else 0
-    itinerario.progreso = progreso
+    if total_cursos == 0:
+        itinerario.progreso = 0
+    else:
+        cursos_completados = Progreso.objects.filter(
+            usuario=usuario,
+            curso__in=cursos,
+            porcentaje=100
+        ).count()
+
+        itinerario.progreso = int((cursos_completados / total_cursos) * 100)
+
     itinerario.save()
+

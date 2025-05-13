@@ -102,7 +102,7 @@ def perfil_view(request):
     user = request.user
 
     if request.method == 'GET':
-        serializer = GetDatosPerfil(user)
+        serializer = UsuarioSerializer(user)
         return Response(serializer.data)
 
     elif request.method == 'PUT':

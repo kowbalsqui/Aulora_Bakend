@@ -21,15 +21,26 @@ class CategoriaSerializer(serializers.ModelSerializer):
 
 # Serializer para Modulo
 class ModuloSerializer(serializers.ModelSerializer):
+    completado = serializers.SerializerMethodField()
+
     class Meta:
         model = Modulo
-        fields = ['id', 'curso_id', 'titulo', 'contenido', 'tipo_archivo', 'archivo']
-    
+        fields = ['id', 'curso_id', 'titulo', 'contenido', 'completado',  'tipo_archivo', 'archivo']
+
+
+    def get_completado(self, obj):
+        request = self.context.get('request')
+        user = request.user if request else None
+        return user and user.is_authenticated and ModuloCompletado.objects.filter(usuario=user, modulo=obj).exists()
+
 # Serializer para Curso
 class CursoSerializer(serializers.ModelSerializer):
     categoria_id = serializers.PrimaryKeyRelatedField(
         queryset=Categoria.objects.all()
     )
+    inscrito = serializers.SerializerMethodField()
+
+
     modulos = ModuloSerializer(many=True, read_only=True, source='modulo_set')
     inscritos = serializers.PrimaryKeyRelatedField(many=True, read_only=True, source='inscripciones')
     categoria_nombre = serializers.CharField(source='categoria_id.nombre', read_only=True)
@@ -40,7 +51,7 @@ class CursoSerializer(serializers.ModelSerializer):
         model = Curso
         fields = [
             'id', 'titulo', 'descripcion', 'categoria_id', 'precio', 'inscripcion',
-            'foto', 'categoria_nombre', 'modulos', 'inscritos', 'progreso_usuario'  # ✅ añadir aquí también
+            'foto', 'categoria_nombre', 'modulos', 'inscritos', 'progreso_usuario', 'inscrito' # ✅ añadir aquí también
         ]
 
     def get_progreso_usuario(self, obj):
@@ -49,6 +60,11 @@ class CursoSerializer(serializers.ModelSerializer):
             progreso = Progreso.objects.filter(usuario=user, curso=obj).first()
             return progreso.porcentaje if progreso else 0
         return None
+    
+    def get_inscrito(self, obj):
+        user = self.context.get('request').user
+        return user.is_authenticated and obj.inscripcion.filter(id=user.id).exists()
+
 
 # Serializer para Pago
 class PagoSerializer(serializers.ModelSerializer):
@@ -84,6 +100,8 @@ class ItinerarioSerializer(serializers.ModelSerializer):
         if user.is_authenticated:
             return obj.inscritos.filter(id=user.id).exists()
         return False
+    
+    
 
 #Serializer para el regustro de los usuarios
     
