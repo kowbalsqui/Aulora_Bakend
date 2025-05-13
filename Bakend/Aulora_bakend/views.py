@@ -200,6 +200,24 @@ class ItinerarioViewSet(viewsets.ModelViewSet):
         itinerario.inscritos.add(user)
         return Response({'detail': 'Inscripción al itinerario completada.'}, status=200)
 
+    @action(detail=True, methods=['post'], url_path='pagar')
+    def pagar(self, request, pk=None):
+        itinerario = self.get_object()
+        user = request.user
+
+        if itinerario.inscritos.filter(id=user.id).exists():
+            return Response({'detail': 'Ya estás inscrito en este itinerario.'}, status=400)
+
+        itinerario.inscritos.add(user)
+
+        for curso in itinerario.cursos.all():
+            # ✅ Crear inscripción usando el modelo relacional explícito
+            Inscripcion.objects.get_or_create(usuario=user, curso=curso)
+            Progreso.objects.get_or_create(usuario=user, curso=curso, defaults={'porcentaje': 0})
+
+        return Response({'detail': 'Pago exitoso e inscripción completada.'}, status=200)
+
+
 class MisCursosViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = CursoSerializer
     permission_classes = [IsAuthenticated]
