@@ -148,7 +148,7 @@ class Inscripcion(models.Model):
 class Itinerario_curso(models.Model):
     itinerario_id = models.ForeignKey('Itinerario', on_delete=models.CASCADE)
     curso = models.ForeignKey('Curso', on_delete=models.CASCADE)
-    fecha_agregado = models.DateField()
+    fecha_agregado = models.DateField(auto_now_add=True)
 
 
 # Clase nueva agregada llamada Progreso, modelo relacional con usuario y cursos, previamente con Itinerarios

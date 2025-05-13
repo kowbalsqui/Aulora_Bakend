@@ -87,13 +87,21 @@ class InscripcionSerializer(serializers.ModelSerializer):
 
 # Serializer para Itinerario
 class ItinerarioSerializer(serializers.ModelSerializer):
-    cursos = CursoSerializer(many=True, read_only=True)
+    cursos_detalles = CursoSerializer(
+        many=True, read_only = True, source = 'cursos'
+    )
+    cursos = serializers.PrimaryKeyRelatedField(
+        queryset=Curso.objects.all(),
+        many=True,
+        write_only=True
+    
+    )
     inscritos = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     inscrito = serializers.SerializerMethodField()
 
     class Meta:
         model = Itinerario
-        fields = ['id', 'titulo', 'descripcion', 'progreso', 'cursos', 'inscrito', 'inscritos']
+        fields = ['id', 'titulo', 'descripcion', 'progreso', 'cursos', 'inscrito', 'inscritos', 'cursos_detalles']
 
     def get_inscrito(self, obj):
         user = self.context['request'].user
@@ -101,13 +109,20 @@ class ItinerarioSerializer(serializers.ModelSerializer):
             return obj.inscritos.filter(id=user.id).exists()
         return False
     
-    
+    def create(self, validated_data):
+        cursos = validated_data.pop('cursos', [])
+        itinerario = Itinerario.objects.create(**validated_data)
+
+        for curso in cursos:
+            Itinerario_curso.objects.create(
+                itinerario_id=itinerario,
+                curso=curso,
+                fecha_agregado=timezone.now().date()
+            )
+
+        return itinerario
 
 #Serializer para el regustro de los usuarios
-    
-from rest_framework import serializers
-from .models import Usuario
-
 class UsuarioSerializerRegistro(serializers.Serializer):
     nombre = serializers.CharField(max_length=100)
     email = serializers.EmailField()
