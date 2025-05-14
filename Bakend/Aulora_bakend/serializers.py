@@ -87,40 +87,28 @@ class InscripcionSerializer(serializers.ModelSerializer):
 
 # Serializer para Itinerario
 class ItinerarioSerializer(serializers.ModelSerializer):
-    cursos_detalles = CursoSerializer(
-        many=True, read_only = True, source = 'cursos'
-    )
-    cursos = serializers.PrimaryKeyRelatedField(
-        queryset=Curso.objects.all(),
-        many=True,
-        write_only=True
-    
-    )
-    inscritos = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    cursos = serializers.PrimaryKeyRelatedField(queryset=Curso.objects.all(), many=True, write_only=True)
+    cursos_detalles = CursoSerializer(source='cursos', many=True, read_only=True)
     inscrito = serializers.SerializerMethodField()
 
     class Meta:
         model = Itinerario
-        fields = ['id', 'titulo', 'descripcion', 'progreso', 'cursos', 'inscrito', 'inscritos', 'cursos_detalles']
+        fields = [
+            'id', 'titulo', 'descripcion', 'progreso',
+            'precio', 'cursos', 'cursos_detalles', 'inscrito', 'inscritos'
+        ]
 
     def get_inscrito(self, obj):
         user = self.context['request'].user
-        if user.is_authenticated:
-            return obj.inscritos.filter(id=user.id).exists()
-        return False
-    
+        return obj.inscritos.filter(id=user.id).exists() if user.is_authenticated else False
+
     def create(self, validated_data):
         cursos = validated_data.pop('cursos', [])
         itinerario = Itinerario.objects.create(**validated_data)
-
         for curso in cursos:
-            Itinerario_curso.objects.create(
-                itinerario_id=itinerario,
-                curso=curso,
-                fecha_agregado=timezone.now().date()
-            )
-
+            Itinerario_curso.objects.create(itinerario_id=itinerario, curso=curso)
         return itinerario
+
 
 #Serializer para el regustro de los usuarios
 class UsuarioSerializerRegistro(serializers.Serializer):

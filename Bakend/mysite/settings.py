@@ -119,11 +119,11 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'aulora_db',        # El nombre de la base de datos que creaste
-        'USER': 'aulora_user',      # El usuario que creaste
-        'PASSWORD': 'Aulora',       # La contraseña que asignaste
+        'NAME': 'postgres',        # El nombre de la base de datos que creaste
+        'USER': 'postgres',      # El usuario que creaste
+        'PASSWORD': 'postgres',       # La contraseña que asignaste
         'HOST': 'localhost',        # Si PostgreSQL está en la misma máquina
-        'PORT': '5432',             # Puerto por defecto de PostgreSQL
+        'PORT': '5433',             # Puerto por defecto de PostgreSQL
     }
 }
 

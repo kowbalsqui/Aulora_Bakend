@@ -182,13 +182,20 @@ class ItinerarioViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
+        queryset = Itinerario.objects.all()
 
+        # Filtro por materia si es profesor
         if user.rol == "2":
             materia = user.profesor.materia
-            return Itinerario.objects.filter(cursos__categoria_id__nombre__iexact=materia).distinct()
-        return super().get_queryset()
-    
+            queryset = queryset.filter(cursos__categoria_id__nombre__iexact=materia).distinct()
 
+        # 🔥 Aplicar limitación si se pasa ?limit=5
+        limit = self.request.query_params.get('limit')
+        if limit and limit.isdigit():
+            return queryset[:int(limit)]
+
+        return queryset
+    
     @action(detail=True, methods=['post'], url_path='inscribirse')
     def inscribirse(self, request, pk=None):
         itinerario = self.get_object()
@@ -211,10 +218,11 @@ class ItinerarioViewSet(viewsets.ModelViewSet):
         itinerario.inscritos.add(user)
 
         for curso in itinerario.cursos.all():
-            # ✅ Crear inscripción usando el modelo relacional explícito
             Inscripcion.objects.get_or_create(usuario=user, curso=curso)
             Progreso.objects.get_or_create(usuario=user, curso=curso, defaults={'porcentaje': 0})
 
+        # Tiene en cuenta el progreso del cursos que ya tenia el usuario de antes.
+        actualizar_progreso_itinerario(user, itinerario)
         return Response({'detail': 'Pago exitoso e inscripción completada.'}, status=200)
 
 

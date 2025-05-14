@@ -1,0 +1,65 @@
+				 Ideas para añadir en Aulora:
+
+-------------------------------------------------------------------------------------------------
+
+Idea: 
+
+Contador de cursos que tiene el usuario realizado
+
+Ejecucion: 
+
+Hacer una variable que sea un contador el cual compruebe que cuando un curso llegue al 100%, añada +1 a la variable y la muestre en el perfil del usario como "cursos completados" 
+
+Idea: 
+
+Ahora mismo cuanod me apunto a un itinerario en un usuario, tengo que cambiar que cuando me apunte, desaparezca de sugeridos y en mis itinerarios me aparezca el itinerario que ya aparece pero sin el boton en verde de "ya estas apuntado" y que ponga el progreso
+
+Idea: 
+
+Añadir funcionalidad de "desapuntarme de los cursos e itinerarios
+
+Idea: 
+
+Hacer unas categorias especificas para los profesores, o hacer un desplegable o algo para controlar que halla una amplia categoria y que no hagan falta escribir las categorias ya que si no es mas facil que el usuario se equivoque a la hora de escribir ya sea por mayusculas, tildes o lo que sea. 
+
+CONTROLAR LAS CATEGORIAS.....
+
+
+EL ORDEN DE PRIPORIDADES DE LAS FUNCIONALIDADES AVANZADAS SERA EL SIGUIENTE (IDEAL TENERLO PARA ANTES DE SUBIRLO A PRODUCCION)
+
+1.- PAYPAL
+
+2.- CHAT-BOT
+
+3.- LOGIN GOOGLE (INDECISO TODAVIA, FALTA ESTUDIARLO)
+
+
+Mejorar los estilos de los cursos y de los itinerarios, se ven probres, darle mas vida. 
+
+Mejorar el perfil del usuario, añadirle mas estilos y mas funcionalidades
+
+No dejar que a la hora de registrarse poder elejir la cuenta premium, por default la normal, posible upgrade a la version PRO, Controlar esto.--------------------------------
+
+Comprobar los itinearios cuando los creo, no se guardan bien los curso que inserto dentro de los itinerarios
+
+
+
+------------------------------------------------------------------------------------------------
+
+					Objetivos
+
+------------------------------------------------------------------------------------------------
+
+Poder entrar a los itinerarios
+
+Ver los cursos de dentro de los itinerarios
+
+Ver el progreso que lleva el usuario dentro de los itinerarios
+
+contar los cursos que ha completado el usuario y los itinerarios que ha completado anteriromente
+
+Poder crear itinerarios, los profesores claro.
+		      ___
+Objetivos completados:|0|
+		      
+
