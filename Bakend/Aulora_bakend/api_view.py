@@ -111,4 +111,21 @@ def perfil_view(request):
             serializer.save()
             return Response(UsuarioSerializer(user).data)  # 🔁 CAMBIO AQUÍ
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def chatbot_responder(request):
+    pregunta = request.data.get("pregunta", "").lower()
+
+    # Ejemplo: si pregunta por cursos
+    if "curso" in pregunta or "cursos disponibles" in pregunta:
+        cursos = Curso.objects.all()
+        respuesta = "Estos son los cursos disponibles:\n"
+        for curso in cursos:
+            respuesta += f"- {curso.titulo} ({curso.precio}€)\n"
+    else:
+        respuesta = "Lo siento, no entiendo tu pregunta."
+
+    return Response({"respuesta": respuesta})
+
 
