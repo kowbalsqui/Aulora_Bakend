@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import Group
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from django.shortcuts import get_object_or_404
 from rest_framework.authentication import TokenAuthentication
 
 # Asegúrate de tener definidos estos serializers en tu proyecto:
@@ -116,6 +117,23 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from .models import Curso, Itinerario  # Asegúrate de tener importados tus modelos
+
+# Api_view para obtener el precio del curso o itinerario sin usar el end-point creado
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def obtener_precio_curso(request, id):
+    curso = get_object_or_404(Curso, id=id)
+    return Response({"precio": curso.precio})
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def obtener_precio_itinerario(request, id):
+    itinerario = get_object_or_404(Itinerario, id=id)
+    return Response({ "precio": itinerario.precio })
+
+# Chat bot Aulora, asistente con preguntas predefinidas segun la interacción del usuario. 
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
