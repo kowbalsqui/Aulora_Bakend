@@ -138,111 +138,117 @@ def obtener_precio_itinerario(request, id):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def chatbot_basico(request):
-    pregunta = request.data.get('pregunta', '').lower()
+    opcion = request.data.get('pregunta', '').strip().lower()
 
-    #Saludo
-
-    if any(p in pregunta for p in ['hola', 'buenas', 'buenos dias', 'buenas tardes' 'buenas noches', 'que tal']):
-        return Response ({"respuesta": "Hola buenas señorito/a estudiante, soy un Chat-Bot programado para tu disposición, perdoname si no entiendo algunas palabras, todavia estoy en fase beta <3"})
-    
-    # Agradecimientos 
-
-    if any(p in pregunta for p in ['muchas gracias', 'gracias', 'ty', 'grax']):
-        return Response ({"respuesta": "A ti por confiar en Aulora, tu chat-bot que te ayudara en todo lo que pueda :)"})
-    
-    # 1. Cursos disponibles
-    if any(p in pregunta for p in ["cursos", "curso"]) and any(p in pregunta for p in ["hay", "tenéis", "tienes", "disponibles", "ofreces", "ofrecéis"]):
-        cursos = Curso.objects.all().values_list('titulo', flat=True)
-        return Response({"respuesta": f"Los cursos disponibles son: {', '.join(cursos)}"})
-
-    # 2. Precio de un curso
-    if any(p in pregunta for p in ["cuánto cuesta", "precio", "vale"]):
-        for curso in Curso.objects.all():
-            if curso.titulo.lower() in pregunta:
-                return Response({"respuesta": f"El curso {curso.titulo} cuesta {curso.precio}€"})
-        return Response({"respuesta": "No encontré ese curso."})
-
-    # 3. Itinerarios que incluyen un curso
-    if "itinerario" in pregunta and any(p in pregunta for p in ["incluyen", "contienen", "tienen"]):
-        for curso in Curso.objects.all():
-            if curso.titulo.lower() in pregunta:
-                itinerarios = Itinerario.objects.filter(cursos=curso).values_list('titulo', flat=True)
-                if itinerarios:
-                    return Response({"respuesta": f"Los itinerarios que incluyen {curso.titulo} son: {', '.join(itinerarios)}"})
-                return Response({"respuesta": f"No hay itinerarios con {curso.titulo}."})
-
-    # 4. Recomendaciones generales o por categoría
-    if any(p in pregunta for p in ["recomiendas", "aconsejas", "empezar", "iniciar"]):
-        categorias = Categoria.objects.all()
-        for cat in categorias:
-            if cat.nombre.lower() in pregunta:
-                curso = Curso.objects.filter(categoria_id=cat.id).first()
-                if curso:
-                    return Response({"respuesta": f"Te recomiendo empezar con el curso: {curso.titulo}, dentro de la categoría {cat.nombre}."})
-                return Response({"respuesta": f"No encontré cursos en la categoría {cat.nombre}."})
-
-        # Recomendación genérica si no se menciona ninguna categoría
+    # INICIO
+    if opcion == 'hola':
         return Response({
-            "respuesta": "Si estás empezando, te recomiendo dependiendo de lo que quieras o estés interesado/a. Pero una base de Matemáticas siempre viene bien."
+            "respuesta": "¡Hola! Soy el chatbot de Aulora. ¿Qué deseas hacer?",
+            "opciones": [
+                "Cursos recomendados",
+                "Cursos por temática",
+                "Itinerarios recomendados",
+                "Buscar curso barato",
+                "Buscar itinerario barato",
+                "Itinerarios por categoría"
+            ]
         })
 
-    # Categorias disponibles
+    # CURSOS RECOMENDADOS
+    elif opcion == 'cursos recomendados':
+        cursos = Curso.objects.all()[:3]
+        nombres = ', '.join(curso.titulo for curso in cursos)
+        return Response({
+            "respuesta": f"Te recomiendo estos cursos: {nombres}",
+            "opciones": ["Volver al inicio"]
+        })
 
-    if any(p in pregunta for p in ['categorias', 'categorías', 'tipos', 'secciones', 'tipo de cursos', 'temas']):
-        categorias = Categoria.objects.all()
-        if categorias.exists():
-            nombres = [cat.nombre for cat in categorias]
-            return Response({"respuesta": f"Las categorías disponibles son: {', '.join(nombres)}"})
+    # ITINERARIOS RECOMENDADOS
+    elif opcion == 'itinerarios recomendados':
+        itinerarios = Itinerario.objects.all()[:3]
+        nombres = ', '.join(it.titulo for it in itinerarios)
+        return Response({
+            "respuesta": f"Te recomiendo estos itinerarios: {nombres}",
+            "opciones": ["Volver al inicio"]
+        })
+
+    # CURSO MÁS BARATO
+    elif opcion == 'buscar curso barato':
+        curso = Curso.objects.order_by('precio').first()
+        if curso:
+            return Response({
+                "respuesta": f"El curso más barato es '{curso.titulo}' y cuesta {curso.precio}€.",
+                "opciones": ["Volver al inicio"]
+            })
         else:
-            return Response({"respuesta": "No hay categorías disponibles por ahora."})
+            return Response({
+                "respuesta": "No hay cursos disponibles.",
+                "opciones": ["Volver al inicio"]
+            })
 
-    # 5. Cursos por temática
-    if "curso" in pregunta and any(p in pregunta for p in ["de", "sobre", "acerca de"]):
-        temas = ["historia", "python", "django", "html", "css", "javascript", "sql"] #AMPLIAR
-        for tema in temas:
-            if tema in pregunta:
-                cursos = Curso.objects.filter(titulo__icontains=tema).values_list('titulo', flat=True)
-                if cursos:
-                    return Response({"respuesta": f"Los cursos sobre {tema.capitalize()} son: {', '.join(cursos)}"})
-                return Response({"respuesta": f"No tenemos cursos específicamente sobre {tema}."})
+    # ITINERARIO MÁS BARATO
+    elif opcion == 'buscar itinerario barato':
+        itinerario = Itinerario.objects.order_by('precio').first()
+        if itinerario:
+            return Response({
+                "respuesta": f"El itinerario más barato es '{itinerario.titulo}' y cuesta {itinerario.precio}€.",
+                "opciones": ["Volver al inicio"]
+            })
+        else:
+            return Response({
+                "respuesta": "No hay itinerarios disponibles.",
+                "opciones": ["Volver al inicio"]
+            })
 
-    # 6. Qué es un itinerario
-    if any(p in pregunta for p in ["qué es un itinerario", "que es un itinerario", "para qué sirve un itinerario"]):
-        return Response({"respuesta": "Un itinerario es un conjunto de cursos organizados para ayudarte a aprender un tema de forma progresiva."})
+    # CURSOS POR TEMÁTICA (categorías de cursos)
+    elif opcion == 'cursos por temática':
+        categorias = Categoria.objects.all().values_list('nombre', flat=True)
+        return Response({
+            "respuesta": "Elige una temática:",
+            "opciones": list(categorias) + ["Volver al inicio"]
+        })
 
-    # 7. Cómo apuntarse
-    if any(p in pregunta for p in ["apuntarme", "inscribirme", "registrarme", "unirme", "cómo me apunto"]):
-        return Response({"respuesta": "Para apuntarte a un curso o itinerario, haz clic en el botón 'Apuntarme' desde la página principal."})
+    # ITINERARIOS POR CATEGORÍA (categorías de cursos también)
+    elif opcion == 'itinerarios por categoría':
+        categorias = Categoria.objects.all().values_list('nombre', flat=True)
+        return Response({
+            "respuesta": "Selecciona una categoría:",
+            "opciones": list(categorias) + ["Volver al inicio"]
+        })
 
-    # 8. Cursos gratuitos
-    if any(p in pregunta for p in ["gratuitos", "gratis", "sin pagar", "costo cero"]):
-        cursos_gratis = Curso.objects.filter(precio=0).values_list('titulo', flat=True)
-        if cursos_gratis:
-            return Response({"respuesta": f"Estos cursos son gratuitos: {', '.join(cursos_gratis)}"})
-        return Response({"respuesta": "Actualmente no hay cursos gratuitos disponibles."})
+    # OPCIÓN DE VOLVER
+    elif opcion == 'volver al inicio':
+        return Response({
+            "respuesta": "¿Qué deseas hacer?",
+            "opciones": [
+                "Cursos recomendados",
+                "Cursos por temática",
+                "Itinerarios recomendados",
+                "Buscar curso barato",
+                "Buscar itinerario barato",
+                "Itinerarios por categoría"
+            ]
+        })
+    
+    elif Categoria.objects.filter(nombre__iexact=opcion).exists():
+        cat = Categoria.objects.get(nombre__iexact=opcion)
+        cursos = Curso.objects.filter(categoria_id=cat.id)
+        itinerarios = Itinerario.objects.filter(cursos__categoria_id=cat.id).distinct()
 
-    # 9. Cursos con prácticas
-    if any(p in pregunta for p in ["práctica", "prácticas", "ejercicios", "proyectos"]):
-        return Response({"respuesta": "Muchos cursos incluyen ejercicios prácticos, especialmente los de programación y desarrollo web."})
+        if cursos.exists():
+            return Response({
+                "respuesta": f"Cursos en la categoría {cat.nombre}: {', '.join(c.titulo for c in cursos)}",
+                "opciones": ["Volver al inicio"]
+            })
 
-    # 10. Acceso desde el móvil
-    if any(p in pregunta for p in ["móvil", "celular", "teléfono", "tablet"]):
-        return Response({"respuesta": "Sí, puedes acceder a Aulora desde cualquier dispositivo con conexión a internet, incluyendo móviles."})
+        elif itinerarios.exists():
+            return Response({
+                "respuesta": f"Itinerarios con cursos de la categoría {cat.nombre}: {', '.join(i.titulo for i in itinerarios)}",
+                "opciones": ["Volver al inicio"]
+            })
 
-    # 11. Experiencia previa
-    if any(p in pregunta for p in ["experiencia previa", "necesito saber", "ya tengo que saber", "nivel necesario"]):
-        return Response({"respuesta": "No necesitas experiencia previa para la mayoría de los cursos. Están diseñados para aprender desde cero."})
-
-    # 12. Duración del curso
-    if any(p in pregunta for p in ["cuánto dura", "duración", "tiempo que lleva"]):
-        for curso in Curso.objects.all():
-            if curso.titulo.lower() in pregunta and curso.duracion:
-                return Response({"respuesta": f"El curso {curso.titulo} tiene una duración estimada de {curso.duracion} horas."})
-        return Response({"respuesta": "No encontré la duración de ese curso."})
-
-    # 13. Preguntas confidenciales
-    if any(p in pregunta for p in ["usuario", "usuarios", "profesor", "profesores", "estudiante", "estudiantes"]):
-        return Response({"respuesta": "No puedo darte información personal de los usuarios por razones de privacidad."})
-
-    # 14. Catch-all
-    return Response({"respuesta": "No entendí tu pregunta. Puedes preguntarme por cursos, itinerarios, precios o recomendaciones."})
+        else:
+            return Response({
+                "respuesta": f"No hay cursos ni itinerarios en la categoría {cat.nombre}.",
+                "opciones": ["Volver al inicio"]
+            })
