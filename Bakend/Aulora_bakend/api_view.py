@@ -138,76 +138,117 @@ def obtener_precio_itinerario(request, id):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def chatbot_basico(request):
-    pregunta = request.data.get('pregunta', '').lower()
+    opcion = request.data.get('pregunta', '').strip().lower()
 
-     # Saludo
-    if any(p in pregunta for p in ['hola', 'buenas', 'buenos dias', 'buenas tardes', 'buenas noches', 'que tal']):
+    # INICIO
+    if opcion == 'hola':
         return Response({
-            "respuesta": "¡Hola! Soy el chatbot de Aulora. ¿En qué puedo ayudarte?",
+            "respuesta": "¡Hola! Soy el chatbot de Aulora. ¿Qué deseas hacer?",
             "opciones": [
                 "Cursos recomendados",
                 "Cursos por temática",
                 "Itinerarios recomendados",
                 "Buscar curso barato",
+                "Buscar itinerario barato",
                 "Itinerarios por categoría"
             ]
         })
 
-    # Qué eres / Cómo funcionas
-    if any(p in pregunta for p in ['qué eres', 'que eres', 'quién eres', 'quien eres']):
-        return Response({"respuesta": "Soy un chatbot diseñado para ayudarte a explorar cursos e itinerarios en Aulora."})
-
-    if any(p in pregunta for p in ['cómo funcionas', 'como funcionas', 'cómo operas', 'como operas']):
-        return Response({"respuesta": "Funciono respondiendo a tus preguntas sobre cursos, itinerarios, precios, recomendaciones y más. Solo escribe lo que necesites saber."})
-
-    # Cursos recomendados
-    if 'cursos recomendados' in pregunta:
+    # CURSOS RECOMENDADOS
+    elif opcion == 'cursos recomendados':
         cursos = Curso.objects.all()[:3]
         nombres = ', '.join(curso.titulo for curso in cursos)
-        return Response({"respuesta": f"Te recomiendo estos cursos: {nombres}"})
+        return Response({
+            "respuesta": f"Te recomiendo estos cursos: {nombres}",
+            "opciones": ["Volver al inicio"]
+        })
 
-    # Recomendaciones por materia
-    materias = ['historia', 'python', 'django', 'html', 'css', 'javascript', 'sql']
-    for materia in materias:
-        if materia in pregunta:
-            cursos = Curso.objects.filter(titulo__icontains=materia).values_list('titulo', flat=True)
-            if cursos:
-                return Response({"respuesta": f"Te recomiendo estos cursos sobre {materia.capitalize()}: {', '.join(cursos)}"})
-            return Response({"respuesta": f"No encontré cursos sobre {materia}."})
-
-    # Curso aparece en itinerario
-    if 'curso' in pregunta and 'itinerario' in pregunta:
-        for curso in Curso.objects.all():
-            if curso.titulo.lower() in pregunta:
-                itinerarios = Itinerario.objects.filter(cursos=curso).values_list('titulo', flat=True)
-                if itinerarios:
-                    return Response({"respuesta": f"El curso {curso.titulo} aparece en los itinerarios: {', '.join(itinerarios)}"})
-                return Response({"respuesta": f"El curso {curso.titulo} no está en ningún itinerario."})
-
-    # Curso barato
-    if 'curso' in pregunta and any(p in pregunta for p in ['barato', 'económico', 'menor precio']):
-        curso = Curso.objects.order_by('precio').first()
-        return Response({"respuesta": f"El curso más barato es {curso.titulo} y cuesta {curso.precio}€"})
-
-    # Itinerarios recomendados
-    if 'itinerarios recomendados' in pregunta:
+    # ITINERARIOS RECOMENDADOS
+    elif opcion == 'itinerarios recomendados':
         itinerarios = Itinerario.objects.all()[:3]
-        titulos = ', '.join(it.titulo for it in itinerarios)
-        return Response({"respuesta": f"Te recomiendo estos itinerarios: {titulos}"})
+        nombres = ', '.join(it.titulo for it in itinerarios)
+        return Response({
+            "respuesta": f"Te recomiendo estos itinerarios: {nombres}",
+            "opciones": ["Volver al inicio"]
+        })
 
-    # Itinerarios con curso de X categoría
-    if 'itinerario' in pregunta and any(p in pregunta for p in ['categoría', 'categoria']):
-        for cat in Categoria.objects.all():
-            if cat.nombre.lower() in pregunta:
-                itinerarios = Itinerario.objects.filter(cursos__categoria=cat).distinct()
-                if itinerarios:
-                    return Response({"respuesta": f"Los itinerarios con cursos de {cat.nombre} son: {', '.join(i.titulo for i in itinerarios)}"})
-                return Response({"respuesta": f"No hay itinerarios con cursos de la categoría {cat.nombre}."})
+    # CURSO MÁS BARATO
+    elif opcion == 'buscar curso barato':
+        curso = Curso.objects.order_by('precio').first()
+        if curso:
+            return Response({
+                "respuesta": f"El curso más barato es '{curso.titulo}' y cuesta {curso.precio}€.",
+                "opciones": ["Volver al inicio"]
+            })
+        else:
+            return Response({
+                "respuesta": "No hay cursos disponibles.",
+                "opciones": ["Volver al inicio"]
+            })
 
-    # Itinerario barato
-    if 'itinerario' in pregunta and any(p in pregunta for p in ['barato', 'económico', 'menor precio']):
+    # ITINERARIO MÁS BARATO
+    elif opcion == 'buscar itinerario barato':
         itinerario = Itinerario.objects.order_by('precio').first()
-        return Response({"respuesta": f"El itinerario más barato es {itinerario.titulo} y cuesta {itinerario.precio}€"})
+        if itinerario:
+            return Response({
+                "respuesta": f"El itinerario más barato es '{itinerario.titulo}' y cuesta {itinerario.precio}€.",
+                "opciones": ["Volver al inicio"]
+            })
+        else:
+            return Response({
+                "respuesta": "No hay itinerarios disponibles.",
+                "opciones": ["Volver al inicio"]
+            })
 
-    # Catch-all
-    return Response({"respuesta": "No entendí tu pregunta. Puedes preguntarme por cursos, itinerarios, precios o recomendaciones."})
+    # CURSOS POR TEMÁTICA (categorías de cursos)
+    elif opcion == 'cursos por temática':
+        categorias = Categoria.objects.all().values_list('nombre', flat=True)
+        return Response({
+            "respuesta": "Elige una temática:",
+            "opciones": list(categorias) + ["Volver al inicio"]
+        })
+
+    # ITINERARIOS POR CATEGORÍA (categorías de cursos también)
+    elif opcion == 'itinerarios por categoría':
+        categorias = Categoria.objects.all().values_list('nombre', flat=True)
+        return Response({
+            "respuesta": "Selecciona una categoría:",
+            "opciones": list(categorias) + ["Volver al inicio"]
+        })
+
+    # OPCIÓN DE VOLVER
+    elif opcion == 'volver al inicio':
+        return Response({
+            "respuesta": "¿Qué deseas hacer?",
+            "opciones": [
+                "Cursos recomendados",
+                "Cursos por temática",
+                "Itinerarios recomendados",
+                "Buscar curso barato",
+                "Buscar itinerario barato",
+                "Itinerarios por categoría"
+            ]
+        })
+    
+    elif Categoria.objects.filter(nombre__iexact=opcion).exists():
+        cat = Categoria.objects.get(nombre__iexact=opcion)
+        cursos = Curso.objects.filter(categoria_id=cat.id)
+        itinerarios = Itinerario.objects.filter(cursos__categoria_id=cat.id).distinct()
+
+        if cursos.exists():
+            return Response({
+                "respuesta": f"Cursos en la categoría {cat.nombre}: {', '.join(c.titulo for c in cursos)}",
+                "opciones": ["Volver al inicio"]
+            })
+
+        elif itinerarios.exists():
+            return Response({
+                "respuesta": f"Itinerarios con cursos de la categoría {cat.nombre}: {', '.join(i.titulo for i in itinerarios)}",
+                "opciones": ["Volver al inicio"]
+            })
+
+        else:
+            return Response({
+                "respuesta": f"No hay cursos ni itinerarios en la categoría {cat.nombre}.",
+                "opciones": ["Volver al inicio"]
+            })
