@@ -26,4 +26,7 @@ urlpatterns = [
     path('logout/', logout_view, name='logout'),
     path('perfil/', perfil_view, name= 'perfil'),
     path('chatbot/', chatbot_basico),
+    path('cursos/<int:id>/precio/', obtener_precio_curso),
+    path('itinerarios/<int:id>/precio/', obtener_precio_itinerario),
+
 ]
