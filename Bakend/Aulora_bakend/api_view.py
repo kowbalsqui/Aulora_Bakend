@@ -1,3 +1,4 @@
+import requests
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.response import Response
 from rest_framework import status
@@ -13,9 +14,27 @@ from rest_framework.authentication import TokenAuthentication
 from .serializers import *
 from .models import *
 
+def verificar_captcha(token):
+    secret_key = '6LdmOFQrAAAAAFmdvYOxEMhQ8LXsJ_YKIRBIZgh3'
+    url = 'https://www.google.com/recaptcha/api/siteverify'
+    data = {
+        'secret': secret_key,
+        'response': token
+    }
+    respuesta = requests.post(url, data=data)
+    resultado = respuesta.json()
+    return resultado.get('success', False)
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register_view(request):
+
+    #Verificar el captcha
+    captcha_token = request.data.get('captcha')
+    if not captcha_token or not verificar_captcha(captcha_token):
+        return Response({'detail': 'Captcha inválido'}, status=status.HTTP_400_BAD_REQUEST)
+
+    #Registro del usuario
     serializer = UsuarioSerializerRegistro(data=request.data)
     if serializer.is_valid():
         try:
@@ -112,11 +131,6 @@ def perfil_view(request):
             serializer.save()
             return Response(UsuarioSerializer(user).data)  # 🔁 CAMBIO AQUÍ
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
-from .models import Curso, Itinerario  # Asegúrate de tener importados tus modelos
 
 # Api_view para obtener el precio del curso o itinerario sin usar el end-point creado
 
