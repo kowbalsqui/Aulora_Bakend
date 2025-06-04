@@ -78,6 +78,9 @@ docker-compose down
 
 ---
 
+<<<<<<< HEAD
+¡Eso es todo! Aulora estará corriendo localmente usando las imágenes Docker públicas de [carlospereafiguera](https://hub.docker.com/u/carlospereafiguera) 🎉
+=======
 ¡Eso es todo! Aulora estará corriendo localmente usando las imágenes Docker públicas de [carlospereafiguera](https://hub.docker.com/u/carlospereafiguera)
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -121,3 +124,4 @@ Luego dentro de angular haremos lo siguiente pasos:
 -comando: ng serve (esto inicia por defecto el proyecto en 4200)
 
 Todas las configuraciones que tienen por defecto sobre los puertos son las que estan predefinidas, si se quieren cambiar deberear de cambiar las cosas de comunicaciones tanto frontend como bakend. 
+>>>>>>> e444850bb8d435200f3defeedafe61a40d3718b9
