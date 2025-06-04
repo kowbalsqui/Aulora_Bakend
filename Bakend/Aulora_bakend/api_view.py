@@ -8,6 +8,8 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.shortcuts import get_object_or_404
 from rest_framework.authentication import TokenAuthentication
+from django.contrib.auth.models import *
+
 
 # Asegúrate de tener definidos estos serializers en tu proyecto:
 # UsuarioSerializerRegistro para la creación y UsuarioSerializer para mostrar datos.
@@ -131,6 +133,38 @@ def perfil_view(request):
             serializer.save()
             return Response(UsuarioSerializer(user).data)  # 🔁 CAMBIO AQUÍ
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+#Api_view para la recuperacion de la contraseña parte 1: verificacion del email del usuario con la base de datos.
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def verificar_email(request):
+    email = request.data.get('email')
+    if not email:
+        return Response({'detail': 'Email requerido'}, status=400)
+
+    if Usuario.objects.filter(email=email).exists():
+        return Response({'detail': 'Email válido'}, status=200)
+    else:
+        return Response({'detail': 'Email no registrado'}, status=404)
+
+    
+# Api_view recuperacion de contraseña parte 2, redireccion de página y cambio de contraseña.
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def reset_password(request):
+    email = request.data.get('email')
+    new_password = request.data.get('password')
+
+    try:
+        user = Usuario.objects.get(email=email)
+        user.set_password(new_password)
+        user.save()
+        return Response({'detail': 'Contraseña cambiada correctamente'})
+    except Usuario.DoesNotExist:
+        return Response({'detail': 'Usuario no encontrado'}, status=404)
 
 # Api_view para obtener el precio del curso o itinerario sin usar el end-point creado
 

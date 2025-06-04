@@ -28,5 +28,6 @@ urlpatterns = [
     path('chatbot/', chatbot_basico),
     path('cursos/<int:id>/precio/', obtener_precio_curso),
     path('itinerarios/<int:id>/precio/', obtener_precio_itinerario),
-
+    path('verificar-email/', verificar_email),
+    path('reset-password/', reset_password),
 ]
