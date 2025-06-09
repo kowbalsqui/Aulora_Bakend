@@ -108,6 +108,23 @@ class ItinerarioSerializer(serializers.ModelSerializer):
         for curso in cursos:
             Itinerario_curso.objects.create(itinerario_id=itinerario, curso=curso)
         return itinerario
+    
+    def update(self, instance, validated_data):
+        cursos = validated_data.pop('cursos', None)
+
+        # Actualizar campos simples
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        # Actualizar relación M2M a través del modelo intermedio
+        if cursos is not None:
+            instance.cursos.clear()
+            for curso in cursos:
+                Itinerario_curso.objects.create(itinerario_id=instance, curso=curso)
+
+        return instance
+
 
 
 #Serializer para el regustro de los usuarios
